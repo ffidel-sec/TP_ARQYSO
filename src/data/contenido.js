@@ -224,12 +224,19 @@ export const contenido = {
         slug: 'implementacion-de-segmentacion-pura',
         titulo: 'Implementación de segmentación pura',
         presentador: 'Grando Fidel',
-        introduccion:
-          'En la segmentación pura, cada proceso tiene una tabla de segmentos con pares (base, límite). La CPU traduce (segmento, offset) a dirección física sumando la base del segmento al offset, verificando que no supere el límite.',
         secciones: [
-          { titulo: 'Traducción de direcciones', items: ['La CPU recibe la dirección lógica (s, d).', 'Busca el segmento s en la tabla de segmentos.', 'Verifica que 0 ≤ d < límite del segmento.', 'Calcula dirección física = base + d.'] },
-          { titulo: 'Protección por segmento', items: ['Cada entrada de la tabla tiene bits de protección (lectura, escritura, ejecución).', 'Se evita que un proceso acceda a segmentos de otros procesos.', 'Se verifica cada acceso contra los permisos del segmento.'] },
-          { titulo: 'Problemas de la segmentación pura', items: ['Fragmentación externa: los segmentos se asignan y liberan dejando huecos.', 'Se necesita compactación periódica para agrupar la memoria libre.', 'Los segmentos grandes pueden no encontrar espacio contiguo suficiente.'] },
+          {
+            static: true,
+            component: 'fragmentacion-externa',
+            titulo: 'Fragmentación externa y compactación',
+            intro: 'Se diferencia de la paginación principalmente en que las páginas tienen un tamaño físico y los segmentos no.',
+            items: [
+              'Este es el principal problema de la Segmentación pura.',
+              'En este recuadro podemos ver cómo se desarrolla la Fragmentación Externa (efecto tablero de ajedrez), donde básicamente, los segmentos grandes se van liberando (los procesos finalizan) y van siendo ocupados por segmentos más pequeños, lo que genera que hayan pequeñas porciones de memoria desperdiciadas.',
+              'Para solucionar esto se creó la compactación (3-34(e)), que básicamente junta todos los segmentos y los huecos se consolidan en uno solo grande, quedando espacio contiguo utilizable.',
+              'La compactación tiene un costo alto: el SO tiene que mover segmentos en memoria y actualizar las tablas de segmentos. No es gratis.',
+            ],
+          },
         ],
       },
       {

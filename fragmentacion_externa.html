@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fragmentación Externa — Efecto Tablero de Ajedrez</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans',sans-serif;background:#f8f7f4;color:#2c2c2a;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px 16px}
+
+.card{background:#fff;border:1.5px solid #d3d1c7;border-radius:10px;padding:28px 24px;max-width:720px;width:100%;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+
+h1{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;letter-spacing:.08em;color:#5f5e5a;text-transform:uppercase;margin-bottom:6px}
+.subtitle{font-size:13px;color:#888780;margin-bottom:24px}
+
+.steps-row{display:flex;gap:10px;align-items:flex-end;justify-content:center}
+
+.step{display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;min-width:0;cursor:pointer}
+.step-label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#888780;letter-spacing:.05em;transition:color .2s}
+.step.active .step-label{color:#2c2c2a;font-weight:600}
+
+.memory{width:100%;border:1.5px solid #b4b2a9;border-radius:4px;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.memory:hover{border-color:#5f5e5a;box-shadow:0 0 0 2px rgba(44,44,42,.08)}
+.step.active .memory{border-color:#2c2c2a;box-shadow:0 0 0 2px rgba(44,44,42,.12)}
+
+.seg{width:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:height .4s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
+.seg-label{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;text-align:center;line-height:1.2;pointer-events:none}
+.seg-size{font-family:'IBM Plex Mono',monospace;font-size:9px;opacity:.7;pointer-events:none}
+
+.s0{background:#e8f4fd;color:#0c447c}
+.s1{background:#fef3e8;color:#633806}
+.s2{background:#eaf3de;color:#27500a}
+.s3{background:#fbeaf0;color:#4b1528}
+.s4{background:#eeedfe;color:#26215c}
+.s5{background:#e1f5ee;color:#04342c}
+.s6{background:#faeeda;color:#412402}
+.s7{background:#f0f4f8;color:#2c3e50}
+.frag{background:repeating-linear-gradient(45deg,#d3d1c7 0px,#d3d1c7 2px,#f1efe8 2px,#f1efe8 8px)!important;color:#888780!important}
+
+.seg+.seg{border-top:1px solid rgba(0,0,0,.08)}
+
+.info{margin-top:20px;padding:12px 16px;border:1px solid #e8e6df;border-radius:6px;background:#faf9f7}
+.info-step{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#888780;margin-bottom:4px}
+.info-desc{font-size:13px;line-height:1.6;color:#2c2c2a}
+.info-desc strong{font-weight:600}
+
+.nav{display:flex;gap:8px;margin-top:14px;justify-content:center;align-items:center}
+.btn{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.06em;padding:6px 14px;border:1.5px solid #b4b2a9;border-radius:3px;background:transparent;color:#2c2c2a;cursor:pointer;transition:background .15s,color .15s}
+.btn:hover{background:#2c2c2a;color:#fff}
+.btn:disabled{opacity:.3;cursor:default}
+.btn:disabled:hover{background:transparent;color:#2c2c2a}
+
+.dots{display:flex;gap:6px;align-items:center}
+.dot{width:6px;height:6px;border-radius:50%;background:#d3d1c7;transition:background .2s;cursor:pointer}
+.dot.active{background:#2c2c2a}
+
+@media(max-width:480px){
+  .steps-row{gap:6px}
+  .seg-label{font-size:9px}
+  .card{padding:20px 14px}
+}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Fragmentación externa</h1>
+  <p class="subtitle">Efecto tablero de ajedrez — Figura 3-34 (Tanenbaum)</p>
+  <div class="steps-row" id="steps-row"></div>
+  <div class="info">
+    <div class="info-step" id="info-step"></div>
+    <div class="info-desc" id="info-desc"></div>
+  </div>
+  <div class="nav">
+    <button class="btn" id="btn-prev" onclick="go(-1)">← Anterior</button>
+    <div class="dots" id="dots"></div>
+    <button class="btn" id="btn-next" onclick="go(1)">Siguiente →</button>
+  </div>
+</div>
+
+<script>
+const MAX_H = 300;
+
+const steps = [
+  {
+    label:"(a)",
+    desc:"<strong>Estado inicial.</strong> La memoria está ocupada por 5 segmentos contiguos de distintos tamaños. No hay fragmentación todavía.",
+    segs:[
+      {name:"Seg 4",size:7,cls:"s4"},
+      {name:"Seg 3",size:8,cls:"s3"},
+      {name:"Seg 2",size:5,cls:"s2"},
+      {name:"Seg 1",size:8,cls:"s1"},
+      {name:"Seg 0",size:4,cls:"s0"},
+    ]
+  },
+  {
+    label:"(b)",
+    desc:"<strong>Seg 1 finaliza y se libera.</strong> Queda un hueco de 3K. Entra Seg 7 (5K) en un espacio mayor, y el hueco restante de 3K queda inutilizable por ahora.",
+    segs:[
+      {name:"Seg 4",size:7,cls:"s4"},
+      {name:"Seg 3",size:8,cls:"s3"},
+      {name:"Seg 2",size:5,cls:"s2"},
+      {name:"",size:3,cls:"frag"},
+      {name:"Seg 7",size:5,cls:"s7"},
+      {name:"Seg 0",size:4,cls:"s0"},
+    ]
+  },
+  {
+    label:"(c)",
+    desc:"<strong>Entra Seg 5 (4K).</strong> Ocupa parte del espacio que dejó Seg 4 al liberarse. Quedan dos huecos de 3K dispersos — empieza el efecto tablero de ajedrez.",
+    segs:[
+      {name:"",size:3,cls:"frag"},
+      {name:"Seg 5",size:4,cls:"s5"},
+      {name:"Seg 3",size:8,cls:"s3"},
+      {name:"Seg 2",size:5,cls:"s2"},
+      {name:"",size:3,cls:"frag"},
+      {name:"Seg 7",size:5,cls:"s7"},
+      {name:"Seg 0",size:4,cls:"s0"},
+    ]
+  },
+  {
+    label:"(d)",
+    desc:"<strong>Más cambios, más huecos.</strong> Entra Seg 6 (4K). Los huecos de 3K están intercalados con segmentos activos. Un segmento nuevo de 10K <em>no entraría</em> aunque la suma libre lo permita.",
+    segs:[
+      {name:"",size:3,cls:"frag"},
+      {name:"Seg 5",size:4,cls:"s5"},
+      {name:"",size:4,cls:"frag"},
+      {name:"Seg 6",size:4,cls:"s6"},
+      {name:"Seg 2",size:5,cls:"s2"},
+      {name:"",size:3,cls:"frag"},
+      {name:"Seg 7",size:5,cls:"s7"},
+      {name:"Seg 0",size:4,cls:"s0"},
+    ]
+  },
+  {
+    label:"(e)",
+    desc:"<strong>Compactación.</strong> El SO mueve todos los segmentos activos al fondo y consolida los huecos en uno solo de 10K. Ahora entra cualquier segmento de hasta 10K. Costo: el SO tuvo que mover segmentos y actualizar las tablas.",
+    segs:[
+      {name:"",size:10,cls:"frag"},
+      {name:"Seg 5",size:4,cls:"s5"},
+      {name:"Seg 6",size:4,cls:"s6"},
+      {name:"Seg 2",size:5,cls:"s2"},
+      {name:"Seg 7",size:5,cls:"s7"},
+      {name:"Seg 0",size:4,cls:"s0"},
+    ]
+  },
+];
+
+let current = 0;
+const maxK = Math.max(...steps.map(s=>s.segs.reduce((a,x)=>a+x.size,0)));
+
+function render(){
+  const row = document.getElementById('steps-row');
+  row.innerHTML = '';
+  steps.forEach((step,i)=>{
+    const col = document.createElement('div');
+    col.className = 'step'+(i===current?' active':'');
+    col.onclick = ()=>{current=i;render()};
+
+    const mem = document.createElement('div');
+    mem.className = 'memory';
+    const totalK = step.segs.reduce((a,x)=>a+x.size,0);
+    mem.style.height = (totalK/maxK)*MAX_H+'px';
+
+    step.segs.forEach(seg=>{
+      const d = document.createElement('div');
+      d.className = 'seg '+(seg.cls||'');
+      const h = Math.max((seg.size/maxK)*MAX_H, seg.cls==='frag'?12:18);
+      d.style.height = h+'px';
+      if(seg.name){
+        const l = document.createElement('div');
+        l.className='seg-label';
+        l.textContent=seg.name;
+        d.appendChild(l);
+        const s = document.createElement('div');
+        s.className='seg-size';
+        s.textContent='('+seg.size+'K)';
+        d.appendChild(s);
+      } else if(h>=18){
+        const s = document.createElement('div');
+        s.className='seg-size';
+        s.textContent='('+seg.size+'K)';
+        d.appendChild(s);
+      }
+      mem.appendChild(d);
+    });
+
+    const lbl = document.createElement('div');
+    lbl.className='step-label';
+    lbl.textContent=step.label;
+
+    col.appendChild(mem);
+    col.appendChild(lbl);
+    row.appendChild(col);
+  });
+
+  document.getElementById('info-step').textContent = 'Paso '+steps[current].label;
+  document.getElementById('info-desc').innerHTML = steps[current].desc;
+  document.getElementById('btn-prev').disabled = current===0;
+  document.getElementById('btn-next').disabled = current===steps.length-1;
+
+  const dots = document.getElementById('dots');
+  dots.innerHTML='';
+  steps.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='dot'+(i===current?' active':'');
+    d.onclick=(e)=>{e.stopPropagation();current=i;render()};
+    dots.appendChild(d);
+  });
+}
+
+function go(dir){
+  current=Math.max(0,Math.min(steps.length-1,current+dir));
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

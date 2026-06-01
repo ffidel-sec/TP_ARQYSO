@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { temas } from '../data/temas'
 import { subtemasPorSlug } from '../data/contenido'
+import FragmentacionExterna from '../components/FragmentacionExterna'
 
 const topicColors = [
   'from-indigo-500 to-purple-600',
@@ -42,7 +43,12 @@ function SectionAccordion({ sec, index, isOpen, onToggle, color }) {
         className="transition-all duration-300 ease-in-out overflow-hidden"
         style={{ maxHeight: isOpen ? `${contentRef.current?.scrollHeight || 600}px` : '0px', opacity: isOpen ? 1 : 0 }}
       >
-        <div ref={contentRef} className="px-5 pb-5 pl-[4.25rem]">
+        <div ref={contentRef} className="px-5 pb-5 pl-[4.25rem] space-y-4">
+          {sec.intro && (
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-[15px]">
+              {sec.intro}
+            </p>
+          )}
           {sec.items && (
             <ul className="space-y-2.5">
               {sec.items.map((item, j) => (
@@ -134,8 +140,6 @@ export default function SubTemaPage() {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-indigo-200 text-xs font-medium mb-3">
                 <span>{st.id}</span>
-                <span className="w-1 h-1 rounded-full bg-indigo-300" />
-                <span>{st.presentador}</span>
               </div>
               <h1 className="text-3xl md:text-4xl font-extrabold text-white leading-tight">
                 {st.titulo}
@@ -170,13 +174,43 @@ export default function SubTemaPage() {
           <section className="space-y-3 mb-6">
             {st.secciones.map((sec, i) => (
               <div key={i} className="animate-fade-in-up" style={{animationDelay: `${i * 0.06}s`}}>
-                <SectionAccordion
-                  sec={sec}
-                  index={i}
-                  isOpen={!!openSections[i]}
-                  onToggle={() => toggleSection(i)}
-                  color={color}
-                />
+                {sec.static ? (
+                  <div className="bg-white dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm">
+                    {sec.titulo && (
+                      <h3 className="text-base font-semibold text-slate-800 dark:text-slate-100 mb-4">
+                        {sec.titulo}
+                      </h3>
+                    )}
+                    {sec.intro && (
+                      <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-[15px] mb-4">
+                        {sec.intro}
+                      </p>
+                    )}
+                    {sec.component === 'fragmentacion-externa' && (
+                      <div className="mb-4">
+                        <FragmentacionExterna />
+                      </div>
+                    )}
+                    {sec.items && (
+                      <ul className="space-y-2.5">
+                        {sec.items.map((item, j) => (
+                          <li key={j} className="text-slate-600 dark:text-slate-300 leading-relaxed flex items-start gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 dark:bg-indigo-500 mt-2.5 flex-shrink-0" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                ) : (
+                  <SectionAccordion
+                    sec={sec}
+                    index={i}
+                    isOpen={!!openSections[i]}
+                    onToggle={() => toggleSection(i)}
+                    color={color}
+                  />
+                )}
               </div>
             ))}
           </section>

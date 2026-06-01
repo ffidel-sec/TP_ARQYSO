@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fragmentación Externa — Efecto Tablero de Ajedrez</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans',sans-serif;background:#f8f7f4;color:#2c2c2a;padding:16px;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.card{background:#fff;border:1.5px solid #d3d1c7;border-radius:10px;padding:24px 20px;max-width:1000px;width:100%;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+h1{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;letter-spacing:.08em;color:#5f5e5a;text-transform:uppercase;margin-bottom:2px}
+.subtitle{font-size:13px;color:#888780;margin-bottom:16px}
+.steps-row{display:flex;gap:10px;align-items:flex-end;justify-content:center}
+.step{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;min-width:0}
+.step-label{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#2c2c2a;font-weight:600;letter-spacing:.05em;margin-top:4px}
+.memory{width:100%;border:1.5px solid #b4b2a9;border-radius:4px;overflow:hidden;transition:border-color .2s}
+.seg{width:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative;overflow:hidden}
+.seg-label{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;text-align:center;line-height:1.2;pointer-events:none}
+.seg-size{font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.7;pointer-events:none}
+.s0{background:#e8f4fd;color:#0c447c}
+.s1{background:#fef3e8;color:#633806}
+.s2{background:#eaf3de;color:#27500a}
+.s3{background:#fbeaf0;color:#4b1528}
+.s4{background:#eeedfe;color:#26215c}
+.s5{background:#e1f5ee;color:#04342c}
+.s6{background:#faeeda;color:#412402}
+.s7{background:#f0f4f8;color:#2c3e50}
+.frag{background:repeating-linear-gradient(45deg,#d3d1c7 0px,#d3d1c7 2px,#f1efe8 2px,#f1efe8 8px)!important;color:#888780!important}
+.seg+.seg{border-top:1px solid rgba(0,0,0,.08)}
+.step-desc{font-size:11px;color:#5f5e5a;text-align:center;line-height:1.4;max-width:200px}
+.step-desc strong{font-weight:600}
+@media(max-width:768px){.steps-row{flex-wrap:wrap;gap:12px}.step{min-width:130px}}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Fragmentación externa</h1>
+  <p class="subtitle">Efecto tablero de ajedrez — Figura 3-34 (Tanenbaum)</p>
+  <div class="steps-row" id="steps-row"></div>
+</div>
+<script>
+const MAX_H = 380;
+const steps = [
+  {label:"(a)", desc:"<strong>Estado inicial.</strong> 5 segmentos contiguos. Sin fragmentación.",
+   segs:[{name:"Seg 4",size:7,cls:"s4"},{name:"Seg 3",size:8,cls:"s3"},{name:"Seg 2",size:5,cls:"s2"},{name:"Seg 1",size:8,cls:"s1"},{name:"Seg 0",size:4,cls:"s0"}]},
+  {label:"(b)", desc:"<strong>Seg 1 finaliza.</strong> Queda un hueco de 3K. Entra Seg 7 (5K).",
+   segs:[{name:"Seg 4",size:7,cls:"s4"},{name:"Seg 3",size:8,cls:"s3"},{name:"Seg 2",size:5,cls:"s2"},{name:"",size:3,cls:"frag"},{name:"Seg 7",size:5,cls:"s7"},{name:"Seg 0",size:4,cls:"s0"}]},
+  {label:"(c)", desc:"<strong>Entra Seg 5 (4K).</strong> Aparecen dos huecos de 3K.",
+   segs:[{name:"",size:3,cls:"frag"},{name:"Seg 5",size:4,cls:"s5"},{name:"Seg 3",size:8,cls:"s3"},{name:"Seg 2",size:5,cls:"s2"},{name:"",size:3,cls:"frag"},{name:"Seg 7",size:5,cls:"s7"},{name:"Seg 0",size:4,cls:"s0"}]},
+  {label:"(d)", desc:"<strong>Más fragmentación.</strong> Un segmento nuevo de 10K <em>no entraría</em>.",
+   segs:[{name:"",size:3,cls:"frag"},{name:"Seg 5",size:4,cls:"s5"},{name:"",size:4,cls:"frag"},{name:"Seg 6",size:4,cls:"s6"},{name:"Seg 2",size:5,cls:"s2"},{name:"",size:3,cls:"frag"},{name:"Seg 7",size:5,cls:"s7"},{name:"Seg 0",size:4,cls:"s0"}]},
+  {label:"(e)", desc:"<strong>Compactación:</strong> todos los segmentos se mueven al fondo. Un solo hueco de 10K.",
+   segs:[{name:"",size:10,cls:"frag"},{name:"Seg 5",size:4,cls:"s5"},{name:"Seg 6",size:4,cls:"s6"},{name:"Seg 2",size:5,cls:"s2"},{name:"Seg 7",size:5,cls:"s7"},{name:"Seg 0",size:4,cls:"s0"}]},
+];
+const maxK = Math.max(...steps.map(s=>s.segs.reduce((a,x)=>a+x.size,0)));
+const row = document.getElementById('steps-row');
+steps.forEach(step => {
+  const col = document.createElement('div');
+  col.className = 'step';
+  const mem = document.createElement('div');
+  mem.className = 'memory';
+  const totalK = step.segs.reduce((a,x)=>a+x.size,0);
+  mem.style.height = (totalK/maxK)*MAX_H+'px';
+  step.segs.forEach(seg => {
+    const d = document.createElement('div');
+    d.className = 'seg '+(seg.cls||'');
+    const h = Math.max((seg.size/maxK)*MAX_H, seg.cls==='frag'?14:22);
+    d.style.height = h+'px';
+    if(seg.name){
+      const l = document.createElement('div'); l.className='seg-label'; l.textContent=seg.name; d.appendChild(l);
+      const s = document.createElement('div'); s.className='seg-size'; s.textContent='('+seg.size+'K)'; d.appendChild(s);
+    } else if(h>=20){
+      const s = document.createElement('div'); s.className='seg-size'; s.textContent='('+seg.size+'K)'; d.appendChild(s);
+    }
+    mem.appendChild(d);
+  });
+  col.appendChild(mem);
+  const lbl = document.createElement('div');
+  lbl.className='step-label'; lbl.textContent=step.label;
+  col.appendChild(lbl);
+  const desc = document.createElement('div');
+  desc.className='step-desc'; desc.innerHTML=step.desc;
+  col.appendChild(desc);
+  row.appendChild(col);
+});
+</script>
+</body>
+</html>
