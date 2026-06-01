@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { temas } from '../data/temas'
 import { subtemasPorSlug } from '../data/contenido'
 import FragmentacionExterna from '../components/FragmentacionExterna'
+import ParticipacionSO from '../components/ParticipacionSO'
 
 const topicColors = [
   'from-indigo-500 to-purple-600',
@@ -150,7 +151,7 @@ export default function SubTemaPage() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 -mt-6 relative z-10">
-        {st.introduccion && (
+        {st.introduccion && !st.componente && (
           <section className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 md:p-8 mb-6 transition-colors animate-fade-in">
             <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-3 flex items-center gap-2">
               <svg className="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -164,7 +165,11 @@ export default function SubTemaPage() {
           </section>
         )}
 
-        {st.tipo === 'timeline' ? (
+        {st.componente === 'participacion-so' ? (
+          <section className="mb-6">
+            <ParticipacionSO data={st} />
+          </section>
+        ) : st.tipo === 'timeline' ? (
           <section className="mb-6 pl-2">
             {st.secciones?.map((sec, i) => (
               <TimelineSection key={i} sec={sec} index={i} color={color} />
@@ -216,7 +221,7 @@ export default function SubTemaPage() {
           </section>
         ) : null}
 
-        {st.conceptos && (
+        {st.conceptos && !st.componente && (
           <section className="relative overflow-hidden bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/50 dark:to-purple-950/50 rounded-2xl border border-indigo-100 dark:border-indigo-800/50 p-6 md:p-8 mb-6 transition-colors">
             <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-200/20 rounded-full blur-2xl" />
             <h2 className="text-lg font-semibold text-indigo-800 dark:text-indigo-300 mb-5 flex items-center gap-2">

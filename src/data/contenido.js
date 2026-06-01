@@ -84,6 +84,7 @@ export const contenido = {
         slug: 'participacion-del-so-en-la-paginacion',
         titulo: 'Participación del SO en la paginación',
         presentador: 'Briguera Mateo',
+        componente: 'participacion-so',
         introduccion:
           'El sistema operativo no solo asigna memoria a los procesos, sino que interviene activamente en la paginación en cuatro momentos clave de la vida de un proceso.',
         secciones: [
