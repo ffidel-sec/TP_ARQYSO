@@ -4,6 +4,7 @@ import { temas } from '../data/temas'
 import { subtemasPorSlug } from '../data/contenido'
 import FragmentacionExterna from '../components/FragmentacionExterna'
 import ParticipacionSO from '../components/ParticipacionSO'
+import FigurasPentium from '../components/FigurasPentium'
 
 const topicColors = [
   'from-indigo-500 to-purple-600',
@@ -59,6 +60,9 @@ function SectionAccordion({ sec, index, isOpen, onToggle, color }) {
                 </li>
               ))}
             </ul>
+          )}
+          {sec.figura && (
+            <FigurasPentium tipo={sec.figura} pie={sec.pieFigura} />
           )}
         </div>
       </div>

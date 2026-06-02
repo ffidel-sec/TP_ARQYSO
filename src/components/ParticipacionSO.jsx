@@ -74,90 +74,6 @@ function PhaseCard({ phase, seccion, index, isOpen, onToggle }) {
   )
 }
 
-function MemoryMap({ step }) {
-  const frames = [
-    { addr: '0x00', state: step >= 1 ? 'proc' : 'free', label: 'PCB' },
-    { addr: '0x04', state: step >= 1 ? 'proc' : 'free', label: 'Código' },
-    { addr: '0x08', state: step >= 1 ? 'proc' : 'free', label: 'Datos' },
-    { addr: '0x0C', state: step >= 2 ? 'mmu' : 'free', label: 'Tabla Pag.' },
-    { addr: '0x10', state: step >= 2 ? 'mmu' : 'free', label: 'Page Cache' },
-    { addr: '0x14', state: step === 3 ? 'fault' : step >= 4 ? 'free' : 'free', label: step === 3 ? '← FALLO' : 'Libre' },
-    { addr: '0x18', state: step >= 3 ? 'swap' : 'free', label: step >= 3 ? 'Swap I/O' : 'Libre' },
-    { addr: '0x1C', state: 'free', label: 'Libre' },
-  ]
-
-  const colorMap = {
-    free: 'bg-slate-800/60 border-slate-700/30 text-slate-600',
-    proc: 'bg-emerald-950/40 border-emerald-700/30 text-emerald-400',
-    mmu: 'bg-sky-950/40 border-sky-700/30 text-sky-400',
-    fault: 'bg-amber-950/40 border-amber-700/30 text-amber-400',
-    swap: 'bg-rose-950/40 border-rose-700/30 text-rose-400',
-  }
-
-  return (
-    <div className="rounded-lg border border-slate-700/50 bg-slate-900/60 p-3 font-mono text-xs">
-      <div className="text-slate-500 mb-2 text-[10px] tracking-widest flex items-center gap-2">
-        <span>ESTADO DE LA MEMORIA</span>
-        <span className="flex-1 border-t border-slate-800" />
-      </div>
-      <div className="grid grid-cols-8 gap-1">
-        {frames.map((f, i) => (
-          <div key={i} className={`rounded border px-2 py-1.5 text-center transition-all duration-500 ${colorMap[f.state]}`}>
-            <div className="text-[10px] opacity-60">{f.addr}</div>
-            <div className="font-bold text-[11px] mt-0.5">{f.label}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function RegisterState({ phase }) {
-  const regs = {
-    create: [
-      { name: 'PCB_PTR', val: '0x00A4F1', color: 'text-emerald-400' },
-      { name: 'PAGE_TBL', val: '0x0C', color: 'text-emerald-400' },
-      { name: 'SWAP_SLOT', val: '#0042', color: 'text-emerald-400' },
-      { name: 'STATUS', val: 'CREATING', color: 'text-yellow-400' },
-    ],
-    exec: [
-      { name: 'MMU_MODE', val: 'ON', color: 'text-sky-400' },
-      { name: 'TLB_MISS', val: '0', color: 'text-sky-400' },
-      { name: 'PTBR', val: '0x0C', color: 'text-sky-400' },
-      { name: 'PC', val: '0x0042', color: 'text-sky-400' },
-    ],
-    fault: [
-      { name: 'TRAP_VEC', val: '#14', color: 'text-amber-400' },
-      { name: 'FAULT_ADDR', val: '0x14', color: 'text-amber-400' },
-      { name: 'PC_SAVED', val: '0x0042', color: 'text-amber-400' },
-      { name: 'DMA_BUSY', val: 'YES', color: 'text-red-400' },
-    ],
-    end: [
-      { name: 'PAGES_FREED', val: '6', color: 'text-rose-400' },
-      { name: 'SWAP_FREED', val: '4KB', color: 'text-rose-400' },
-      { name: 'TLB_FLUSH', val: 'OK', color: 'text-rose-400' },
-      { name: 'STATUS', val: 'ZOMBIE', color: 'text-yellow-400' },
-    ],
-  }
-
-  return (
-    <div className="rounded-lg border border-slate-700/50 bg-slate-900/60 p-3 font-mono text-xs">
-      <div className="text-slate-500 mb-2 text-[10px] tracking-widest flex items-center gap-2">
-        <span>REGISTROS DEL SISTEMA</span>
-        <span className="flex-inline border-t border-slate-800" />
-      </div>
-      <div className="grid grid-cols-2 gap-1.5">
-        {(regs[phase] || regs.create).map((r, i) => (
-          <div key={i} className="flex items-center justify-between rounded bg-slate-800/40 px-2.5 py-1.5 border border-slate-700/30">
-            <span className="text-slate-500">{r.name}</span>
-            <span className={`font-bold ${r.color}`}>{r.val}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 export default function ParticipacionSO({ data }) {
   const [openPhase, setOpenPhase] = useState(null)
   const [booted, setBooted] = useState(false)
@@ -181,8 +97,6 @@ export default function ParticipacionSO({ data }) {
     }, 300)
     return () => clearInterval(timer)
   }, [booted])
-
-  const activePhaseIndex = data.secciones?.findIndex((_, i) => i === (openPhase ?? -1)) ?? -1
 
   return (
     <div className="space-y-5">
@@ -232,27 +146,21 @@ export default function ParticipacionSO({ data }) {
         </div>
       )}
 
-      {/* Dashboard panels */}
-      {booted && openPhase !== null && data.secciones?.[openPhase] && (
-        <div className="grid md:grid-cols-2 gap-4 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-          <MemoryMap step={openPhase + 1} />
-          <RegisterState phase={phases[openPhase]?.key} />
-        </div>
-      )}
-
       {/* Key concepts */}
       {booted && data.conceptos && (
-        <div className="rounded-xl border border-slate-700/50 bg-slate-900/80 backdrop-blur-sm p-5 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-          <div className="font-mono text-[10px] text-slate-500 tracking-widest mb-4 flex items-center gap-2">
-            <span>MANUAL — CONCEPTOS</span>
+        <div className="rounded-xl border border-indigo-500/20 bg-slate-900/80 backdrop-blur-sm p-5 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+          <div className="font-mono text-[10px] text-indigo-400 tracking-widest mb-4 flex items-center gap-2">
+            <span>CONCEPTOS CLAVE</span>
             <span className="flex-1 border-t border-slate-800" />
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             {data.conceptos.map((c, i) => (
-              <div key={i} className="rounded-lg border border-slate-700/30 bg-slate-950/60 p-3 font-mono text-xs hover:border-indigo-700/50 transition-colors">
-                <span className="text-indigo-400 font-bold text-[11px]">$ help {c.nombre.toLowerCase().replace(/\s+/g, '-')}</span>
-                <div className="mt-2 flex items-start gap-2">
-                  <span className="text-slate-600 mt-0.5">#</span>
+              <div key={i} className="rounded-lg border border-indigo-800/30 bg-slate-950/60 p-3 font-mono text-xs hover:border-indigo-600/50 transition-colors">
+                <div className="flex items-start gap-2">
+                  <span className="text-indigo-400 font-bold text-[11px]">{c.nombre}</span>
+                </div>
+                <div className="mt-1.5 flex items-start gap-2">
+                  <span className="text-slate-600 mt-0.5">→</span>
                   <span className="text-slate-300 leading-relaxed">{c.descripcion}</span>
                 </div>
               </div>

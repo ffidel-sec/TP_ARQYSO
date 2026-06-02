@@ -4,10 +4,10 @@ import { integrantes } from '../data/temas'
 const secciones = [
   {
     id: '3.6',
-    titulo: 'Paginación',
+    titulo: 'Cuestiones de Implementación',
     slug: 'cuestiones-de-implementacion',
     subtemas: [
-      { id: '3.6', titulo: 'Paginación' },
+      { id: '3.6', titulo: 'Cuestiones de Implementación' },
       { id: '3.6.1', titulo: 'Participación del SO en la paginación', slug: 'participacion-del-so-en-la-paginacion' },
       { id: '3.6.2', titulo: 'Manejo de fallos de página', slug: 'manejo-de-fallas-de-pagina' },
       { id: '3.6.3', titulo: 'Respaldo de Instrucción', slug: 'respaldo-de-instruccion' },

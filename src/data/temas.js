@@ -10,7 +10,7 @@ export const temas = [
   {
     id: '3.6',
     slug: 'cuestiones-de-implementacion',
-    titulo: 'Paginación',
+    titulo: 'Cuestiones de Implementación',
     presentador: 'Briguera Mateo, Nicolas Piñan',
   },
   {

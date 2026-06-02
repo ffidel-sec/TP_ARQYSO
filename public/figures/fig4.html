@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Anillos de Protección</title>
+<style>
+  body { background-color: #1e1e1e; color: #fff; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+  .rings-container { position: relative; width: 400px; height: 400px; display: flex; justify-content: center; align-items: center; }
+  .ring { border-radius: 50%; position: absolute; display: flex; justify-content: center; padding-top: 10px; font-weight: bold; border-width: 2px; border-style: solid; }
+  .ring-3 { width: 300px; height: 290px; border-color: #403b8c; color: #403b8c; }
+  .ring-2 { width: 220px; height: 210px; border-color: #0b5946; color: #0b5946; }
+  .ring-1 { width: 140px; height: 130px; border-color: #7b4b10; color: #7b4b10; }
+  .ring-0 { width: 60px; height: 50px; background-color: #403b8c; border-color: #403b8c; color: #fff; align-items: center; padding-top: 0; justify-content: center; z-index: 10; }
+  .legend { margin-left: 40px; line-height: 1.8; color: #ccc; }
+  .dashed-line { position: absolute; width: 150px; border-bottom: 1px dashed #666; right: 20px; top: 50%; z-index: 1; }
+</style>
+</head>
+<body>
+  <div style="display: flex; align-items: center;">
+      <div class="rings-container">
+        <div class="ring ring-3">3</div>
+        <div class="ring ring-2">2</div>
+        <div class="ring ring-1">1</div>
+        <div class="ring ring-0">0</div>
+        <div class="dashed-line"></div>
+      </div>
+      <div class="legend">
+        <div>Anillo 0 — kernel (máx. privilegio)</div>
+        <div>Anillo 1 — llamadas al sistema</div>
+        <div>Anillo 2 — bibliotecas compartidas</div>
+        <div>Anillo 3 — usuario (mín. privilegio)</div>
+      </div>
+  </div>
+</body>
+</html>

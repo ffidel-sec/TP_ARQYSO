@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Estructura de un Selector</title>
+<style>
+  body { background-color: #1e1e1e; color: #fff; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+  .container { text-align: center; }
+  .selector-box { display: flex; width: 600px; height: 60px; border-radius: 6px; overflow: hidden; border: 1px solid #555; margin-bottom: 10px; }
+  .part { display: flex; align-items: center; justify-content: center; font-weight: bold; border-right: 1px solid #1e1e1e; }
+  .part:last-child { border-right: none; }
+  .index { flex: 13; background-color: #403b8c; }
+  .gdt { flex: 2; background-color: #0b5946; }
+  .level { flex: 3; background-color: #7b4b10; }
+  .labels { display: flex; width: 600px; color: #aaa; font-size: 14px; }
+  .label { text-align: center; }
+  .l-index { flex: 13; }
+  .l-gdt { flex: 2; }
+  .l-level { flex: 3; }
+  p { color: #ccc; margin-top: 30px; font-size: 14px; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="selector-box">
+      <div class="part index">Índice (13 bits)</div>
+      <div class="part gdt">GDT/LDT</div>
+      <div class="part level">Nivel (2 bits)</div>
+    </div>
+    <div class="labels">
+      <div class="label l-index">identifica la entrada</div>
+      <div class="label l-gdt">tabla</div>
+      <div class="label l-level">privilegio 0-3</div>
+    </div>
+    <p>Estructura de un selector de 16 bits del Pentium.</p>
+  </div>
+</body>
+</html>
