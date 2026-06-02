@@ -1,17 +1,37 @@
 import { useState, useEffect, useRef } from 'react'
 
 const phases = [
-  { key: 'create', icon: '◇', label: 'CREAR PROCESO', color: 'emerald' },
-  { key: 'exec', icon: '▶', label: 'EJECUTAR PROCESO', color: 'sky' },
-  { key: 'fault', icon: '⚡', label: 'FALLO DE PÁGINA', color: 'amber' },
-  { key: 'end', icon: '■', label: 'TERMINAR PROCESO', color: 'rose' },
+  { key: 'create', icon: '◇', label: 'Crear proceso', color: 'emerald' },
+  { key: 'exec', icon: '▶', label: 'Ejecutar proceso', color: 'sky' },
+  { key: 'fault', icon: '⚡', label: 'Fallo de página', color: 'amber' },
+  { key: 'end', icon: '■', label: 'Terminar proceso', color: 'rose' },
 ]
 
 const phaseColors = {
-  emerald: { bg: 'bg-emerald-950/60', border: 'border-emerald-700/50', text: 'text-emerald-400', glow: 'shadow-emerald-900/50', dot: 'bg-emerald-400' },
-  sky: { bg: 'bg-sky-950/60', border: 'border-sky-700/50', text: 'text-sky-400', glow: 'shadow-sky-900/50', dot: 'bg-sky-400' },
-  amber: { bg: 'bg-amber-950/60', border: 'border-amber-700/50', text: 'text-amber-400', glow: 'shadow-amber-900/50', dot: 'bg-amber-400' },
-  rose: { bg: 'bg-rose-950/60', border: 'border-rose-700/50', text: 'text-rose-400', glow: 'shadow-rose-900/50', dot: 'bg-rose-400' },
+  emerald: {
+    badge: 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700/50',
+    dot: 'bg-emerald-500',
+    accent: 'text-emerald-600 dark:text-emerald-400',
+    pill: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300',
+  },
+  sky: {
+    badge: 'bg-sky-100 dark:bg-sky-900/40 text-sky-700 dark:text-sky-300 border-sky-200 dark:border-sky-700/50',
+    dot: 'bg-sky-500',
+    accent: 'text-sky-600 dark:text-sky-400',
+    pill: 'bg-sky-500/10 text-sky-700 dark:text-sky-300',
+  },
+  amber: {
+    badge: 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-700/50',
+    dot: 'bg-amber-500',
+    accent: 'text-amber-600 dark:text-amber-400',
+    pill: 'bg-amber-500/10 text-amber-700 dark:text-amber-300',
+  },
+  rose: {
+    badge: 'bg-rose-100 dark:bg-rose-900/40 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-700/50',
+    dot: 'bg-rose-500',
+    accent: 'text-rose-600 dark:text-rose-400',
+    pill: 'bg-rose-500/10 text-rose-700 dark:text-rose-300',
+  },
 }
 
 function PhaseCard({ phase, seccion, index, isOpen, onToggle }) {
@@ -33,39 +53,35 @@ function PhaseCard({ phase, seccion, index, isOpen, onToggle }) {
   }, [isOpen, seccion])
 
   return (
-    <div className={`rounded-xl border ${pc.border} ${pc.bg} backdrop-blur-sm overflow-hidden transition-all duration-500 ${isOpen ? `shadow-lg ${pc.glow} shadow-[0_0_30px_-12px]` : 'shadow-sm opacity-80 hover:opacity-100'}`}>
-      <button onClick={onToggle} className="w-full flex items-center gap-3 px-5 py-4 cursor-pointer text-left group">
-        <span className={`w-9 h-9 rounded-lg border ${pc.border} flex items-center justify-center text-lg ${pc.text} group-hover:scale-110 transition-transform`}>
+    <div className={`bg-white dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300 shadow-sm hover:shadow-md ${isOpen ? 'shadow-md' : ''}`}>
+      <button onClick={onToggle} className="w-full flex items-center gap-4 p-5 cursor-pointer text-left group transition-colors duration-200">
+        <span className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-lg shadow-sm group-hover:scale-105 transition-transform duration-200 ${pc.badge}`}>
           {phase.icon}
         </span>
-        <span className="flex-1 font-mono text-sm font-bold tracking-wider text-slate-100">
-          <span className={pc.text}>#{index + 1}</span> {phase.label}
+        <span className="flex-1 text-base font-semibold text-slate-800 dark:text-slate-100 pr-4">
+          <span className={`text-sm font-mono font-bold ${pc.accent} mr-2`}>#{index + 1}</span>
+          {phase.label}
         </span>
-        <span className={`w-2 h-2 rounded-full transition-all duration-700 ${isOpen ? pc.dot : 'bg-slate-600'}`} />
-        <svg className={`w-4 h-4 text-slate-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          className={`w-5 h-5 text-slate-400 dark:text-slate-500 transition-all duration-300 ${isOpen ? 'rotate-180 text-indigo-500' : ''}`}
+          fill="none" stroke="currentColor" viewBox="0 0 24 24"
+        >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
       <div className="transition-all duration-500 ease-in-out overflow-hidden" style={{ maxHeight: isOpen ? `${contentRef.current?.scrollHeight || 800}px` : '0px' }}>
-        <div ref={contentRef} className="px-5 pb-5 pl-[3.75rem] space-y-3">
+        <div ref={contentRef} className="px-5 pb-5 pl-[4.25rem] space-y-3">
           {seccion?.items?.map((item, j) => (
             <div key={j} className={`flex items-start gap-3 transition-all duration-500 ${isOpen && j < visibleItems ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`} style={{ transitionDelay: `${j * 80}ms` }}>
-              <span className={`font-mono text-[11px] ${pc.text} mt-0.5 flex-shrink-0 w-5`}>{String(j + 1).padStart(2, '0')}</span>
-              <span className="font-mono text-[13px] text-slate-300 leading-relaxed">{item}</span>
+              <span className={`w-1.5 h-1.5 rounded-full ${pc.dot} mt-2 flex-shrink-0`} />
+              <span className="text-slate-600 dark:text-slate-300 leading-relaxed">{item}</span>
             </div>
           ))}
           {isOpen && visibleItems < (seccion?.items?.length ?? 0) && (
-            <div className="flex gap-1.5 pl-8">
+            <div className="flex gap-1.5 pl-7">
               <span className={`w-1.5 h-1.5 rounded-full ${pc.dot} animate-pulse`} />
               <span className={`w-1.5 h-1.5 rounded-full ${pc.dot} animate-pulse`} style={{ animationDelay: '0.2s' }} />
               <span className={`w-1.5 h-1.5 rounded-full ${pc.dot} animate-pulse`} style={{ animationDelay: '0.4s' }} />
-            </div>
-          )}
-          {isOpen && visibleItems >= (seccion?.items?.length ?? 0) && (
-            <div className={`font-mono text-[11px] ${pc.text} pl-8 flex items-center gap-2`}>
-              <span>OK</span>
-              <span className="text-slate-600">—</span>
-              <span className="text-slate-500">{seccion?.items?.length ?? 0} operaciones completadas</span>
             </div>
           )}
         </div>
@@ -76,97 +92,62 @@ function PhaseCard({ phase, seccion, index, isOpen, onToggle }) {
 
 export default function ParticipacionSO({ data }) {
   const [openPhase, setOpenPhase] = useState(null)
-  const [booted, setBooted] = useState(false)
-  const [bootLine, setBootLine] = useState(0)
-
-  const bootLines = [
-    'SISTEMA DE MEMORIA VIRTUAL v3.6.1',
-    'Inicializando MMU... OK',
-    'Cargando tabla de procesos... OK',
-    'Esperando instrucciones...',
-    `Sistema listo — ${data.secciones?.length ?? 0} fases disponibles`,
-  ]
-
-  useEffect(() => {
-    if (booted) return
-    const timer = setInterval(() => {
-      setBootLine((v) => {
-        if (v >= bootLines.length - 1) { clearInterval(timer); setBooted(true); return v }
-        return v + 1
-      })
-    }, 300)
-    return () => clearInterval(timer)
-  }, [booted])
 
   return (
-    <div className="space-y-5">
-      {/* Boot sequence */}
-      <div className="rounded-xl border border-slate-700/60 bg-slate-950 p-5 shadow-2xl shadow-slate-900/80 font-mono">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_6px_theme(colors.red.500)]" />
-          <span className="w-2 h-2 rounded-full bg-yellow-500 shadow-[0_0_6px_theme(colors.yellow.500)]" />
-          <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_6px_theme(colors.emerald.500)]" />
-          <span className="ml-2 text-slate-600 text-[10px] tracking-widest">OS MEMORY CONTROLLER — TERMINAL v1.0</span>
-        </div>
-        <div className="space-y-1">
-          {bootLines.slice(0, bootLine + 1).map((line, i) => (
-            <div key={i} className="flex items-start gap-3 animate-fade-in" style={{ animationDuration: '0.1s' }}>
-              <span className="text-slate-700 text-[11px] mt-0.5 flex-shrink-0">[{String(i).padStart(2, '0')}:00]</span>
-              <span className={`text-[13px] ${i === bootLines.length - 1 && !booted ? 'text-emerald-400' : 'text-slate-300'}`}>
-                {line}
-                {i === bootLines.length - 1 && !booted && <span className="ml-1 animate-pulse">▌</span>}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-
+    <div className="space-y-6">
       {/* Introduction */}
-      {booted && (
-        <div className="rounded-xl border border-slate-700/50 bg-slate-900/80 backdrop-blur-sm p-5 animate-fade-in-up">
-          <p className="font-mono text-[13px] text-slate-300 leading-relaxed">
-            <span className="text-indigo-400 font-bold">$</span> {data.introduccion}
-          </p>
-        </div>
-      )}
+      <section className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 md:p-8 transition-colors animate-fade-in">
+        <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-3 flex items-center gap-2">
+          <svg className="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Introducción
+        </h2>
+        <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-[15px]">
+          {data.introduccion}
+        </p>
+      </section>
 
       {/* Phases */}
-      {booted && (
-        <div className="space-y-3 animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
-          {data.secciones?.map((sec, i) => (
-            <PhaseCard
-              key={i}
-              phase={phases[i] ?? { key: `p${i}`, icon: '•', label: sec.titulo, color: 'slate' }}
-              seccion={sec}
-              index={i}
-              isOpen={openPhase === i}
-              onToggle={() => setOpenPhase(openPhase === i ? null : i)}
-            />
-          ))}
-        </div>
-      )}
+      <div className="space-y-3">
+        {data.secciones?.map((sec, i) => (
+          <PhaseCard
+            key={i}
+            phase={phases[i] ?? { key: `p${i}`, icon: '•', label: sec.titulo, color: 'slate' }}
+            seccion={sec}
+            index={i}
+            isOpen={openPhase === i}
+            onToggle={() => setOpenPhase(openPhase === i ? null : i)}
+          />
+        ))}
+      </div>
 
       {/* Key concepts */}
-      {booted && data.conceptos && (
-        <div className="rounded-xl border border-indigo-500/20 bg-slate-900/80 backdrop-blur-sm p-5 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-          <div className="font-mono text-[10px] text-indigo-400 tracking-widest mb-4 flex items-center gap-2">
-            <span>CONCEPTOS CLAVE</span>
-            <span className="flex-1 border-t border-slate-800" />
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
+      {data.conceptos && (
+        <section className="relative overflow-hidden bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/50 dark:to-purple-950/50 rounded-2xl border border-indigo-100 dark:border-indigo-800/50 p-6 md:p-8 transition-colors">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-200/20 rounded-full blur-2xl" />
+          <h2 className="text-lg font-semibold text-indigo-800 dark:text-indigo-300 mb-5 flex items-center gap-2">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+            </svg>
+            Conceptos clave
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-2 relative">
             {data.conceptos.map((c, i) => (
-              <div key={i} className="rounded-lg border border-indigo-800/30 bg-slate-950/60 p-3 font-mono text-xs hover:border-indigo-600/50 transition-colors">
-                <div className="flex items-start gap-2">
-                  <span className="text-indigo-400 font-bold text-[11px]">{c.nombre}</span>
-                </div>
-                <div className="mt-1.5 flex items-start gap-2">
-                  <span className="text-slate-600 mt-0.5">→</span>
-                  <span className="text-slate-300 leading-relaxed">{c.descripcion}</span>
-                </div>
+              <div
+                key={i}
+                className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl border border-indigo-100 dark:border-indigo-800/50 p-5 hover:shadow-md transition-all duration-200"
+              >
+                <span className="inline-block text-white text-xs font-bold px-2.5 py-1 rounded-lg mb-3 bg-gradient-to-r from-indigo-500 to-purple-600">
+                  {c.nombre}
+                </span>
+                <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                  {c.descripcion}
+                </p>
               </div>
             ))}
           </div>
-        </div>
+        </section>
       )}
     </div>
   )
