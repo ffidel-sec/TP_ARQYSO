@@ -154,16 +154,34 @@ export const contenido = {
         titulo: 'Almacén de respaldo',
         presentador: 'Nicolas Piñan',
         introduccion:
-          'Cuando la RAM se llena, el SO guarda páginas en el disco. Este espacio se conoce como almacén de respaldo o swap.',
+          'Cuando la RAM se llena, el SO guarda páginas en el disco (HDD o SSD). Este espacio se conoce como almacén de respaldo o swap.',
         secciones: [
-          { titulo: 'Partición vs Archivo de intercambio', items: ['Swap Partition: rápida, sin sistema de archivos. Clásica en UNIX/Linux.', 'Swap File: flexible, dentro del sistema de archivos. Más lento.'] },
-          { titulo: 'Asignación estática', items: ['Se reserva un bloque fijo al iniciar el proceso.', 'Usa Copia de Sombra: si bit M=0 no escribe al disco, si M=1 actualiza la copia.'] },
-          { titulo: 'Asignación dinámica', items: ['No se reserva espacio por adelantado.', 'El kernel mantiene un mapa del disco por proceso. Más eficiente en espacio pero mayor sobrecarga.'] },
-          { titulo: 'Código de solo lectura', items: ['Las páginas de código nunca cambian.', 'El SO usa el archivo ejecutable original como respaldo, no gasta swap.'] },
+          {
+            titulo: 'El Tipo de Contenedor: Partición Dedicada vs. Archivo de Intercambio',
+            items: [
+              'Partición dedicada (Swap Partition): Porción del disco sin sistema de archivos, reservada exclusivamente para swap. El kernel accede directamente mediante números de bloque. Es más rápida pero menos flexible. Enfoque clásico de UNIX/Linux.',
+              'Archivo de intercambio (Swap File): Archivo especial dentro del sistema de archivos (ej. pagefile.sys en Windows). El SO escribe páginas dentro de ese archivo. Es más flexible (redimensionable) pero más lento por la sobrecarga del sistema de archivos.',
+            ],
+          },
+          {
+            titulo: 'La Estrategia de Asignación: Estática vs. Dinámica',
+            items: [
+              'Asignación Estática: Al iniciar el proceso se reserva un bloque fijo en disco del tamaño de su espacio de direcciones. Apenas arranca, el SO carga páginas a la RAM pero el contenido original queda en el disco (Copia de Sombra). Si la página nunca se modificó (bit M=0), al ser expulsada se descarta sin escribir, porque la copia en disco ya está vigente. Si se modificó (bit M=1), se escribe sobre la Copia de Sombra para actualizarla. Falla si el proceso crece más de lo reservado.',
+              'Asignación Dinámica: No reserva espacio por adelantado. Solo se asigna un bloque en disco cuando una página es expulsada. El kernel mantiene un mapa del disco por proceso. Maximiza el uso del disco pero genera mayor sobrecarga de CPU.',
+            ],
+          },
+          {
+            titulo: 'Optimización: Código de Solo Lectura',
+            items: [
+              'Las páginas de código (instrucciones) son de solo lectura y nunca cambian.',
+              'El SO no gasta swap para el código: usa el propio archivo ejecutable original (.exe o binario) como almacén de respaldo.',
+              'Si la RAM se llena, el código se descarta y se vuelve a leer del ejecutable original cuando sea necesario.',
+            ],
+          },
         ],
         conceptos: [
-          { nombre: 'Tipo de Contenedor', descripcion: 'Swap partition vs swap file.' },
-          { nombre: 'Estrategia de Asignación', descripcion: 'Estática (Copia de Sombra + bit M) vs dinámica (bajo demanda con mapa del disco).' },
+          { nombre: 'Tipo de Contenedor', descripcion: 'Es el espacio físico en el disco donde el SO guarda las páginas desalojadas de la RAM. Puede ser una partición dedicada (swap partition, sin sistema de archivos, acceso directo) o un archivo de intercambio (swap file, dentro del sistema de archivos, flexible pero más lento).' },
+          { nombre: 'Estrategia de Asignación', descripcion: 'Define cómo se distribuye el espacio en disco para las páginas de cada proceso. Puede ser estática (se reserva un bloque fijo al iniciar el proceso, con Copia de Sombra y bit M) o dinámica (se asigna bajo demanda cuando una página es expulsada, usando un mapa del disco por proceso).' },
         ],
       },
       {
@@ -172,16 +190,47 @@ export const contenido = {
         titulo: 'Separación de política y mecanismo',
         presentador: 'Nicolas Piñan',
         introduccion:
-          'Para evitar que el núcleo del sistema operativo sea un bloque de código gigante, confuso y propenso a fallos, los diseñadores modernos dividen las funciones de administración de memoria en dos categorías: política y mecanismo.',
+          'Para mantener el núcleo del SO modular y evitable, los diseñadores separan la administración de memoria en dos categorías: el mecanismo (cómo se hace, en kernel) y la política (qué y cuándo se hace, en espacio de usuario).',
         secciones: [
-          { titulo: 'Política vs. Mecanismo', items: ['Mecanismo (el "cómo"): herramientas de bajo nivel que ejecutan físicamente acciones. Reside en el kernel.', 'Política (el "qué" y "cuándo"): decisiones estratégicas en espacio de usuario.'] },
-          { titulo: 'Arquitectura de tres componentes (Modelo Mach)', items: ['Manejador de la MMU de bajo nivel (kernel): interactúa con el hardware.', 'Manejador de fallos de página (kernel): independiente de la máquina.', 'Paginador externo (usuario): decide la política de memoria virtual.'] },
-          { titulo: 'Flujo de un fallo de página', items: ['1. El proceso genera un fallo atrapado por el Manejador de fallos.', '2. El kernel envía un mensaje al Paginador Externo.', '3. El Paginador busca la página en disco.', '4. Envía los datos al manejador del kernel.', '5. El manejador configura la MMU y reanuda el proceso.'] },
-          { titulo: 'Dilema técnico: bits R y M', items: ['Bit R: se activa al leer/escribir la página.', 'Bit M: se activa al modificar la página.', 'El Paginador externo necesita estos bits pero solo el kernel accede a la MMU.', 'Solución A: pasar info constantemente (lento).', 'Solución B: dejar algoritmo en kernel (rompe separación).'] },
+          {
+            titulo: 'El Principio: Política vs. Mecanismo',
+            items: [
+              'Mecanismo (el "cómo"): herramientas de bajo nivel que ejecutan físicamente las acciones. Reside en el kernel e interactúa directamente con el hardware (MMU, TLB).',
+              'Política (el "qué" y "cuándo"): decisiones estratégicas como qué página reemplazar, cuándo traer una página, etc. Se ejecuta en espacio de usuario como un proceso más.',
+              'Separarlos mantiene el kernel pequeño, modular y portable entre arquitecturas.',
+            ],
+          },
+          {
+            titulo: 'La Arquitectura de Tres Componentes (El Modelo Mach)',
+            items: [
+              'Manejador de la MMU de bajo nivel (kernel): interactúa directamente con el hardware de la MMU y el TLB. Es dependiente de la arquitectura.',
+              'Manejador de fallos de página (kernel): independiente de la máquina. Atrapa los fallos de página y coordina con el paginador externo.',
+              'Paginador externo (usuario): proceso en espacio de usuario que implementa la política de memoria virtual (qué página reemplazar, cuándo traer una página, etc.).',
+            ],
+          },
+          {
+            titulo: 'El Flujo de un Fallo de Página: Cruzando la Frontera',
+            items: [
+              '1. El proceso genera un fallo atrapado por el Manejador de fallos del kernel.',
+              '2. El kernel envía un mensaje al Paginador Externo (usuario).',
+              '3. El Paginador busca la página en disco y decide qué hacer.',
+              '4. Envía los datos al manejador del kernel.',
+              '5. El manejador configura la MMU y reanuda el proceso.',
+            ],
+          },
+          {
+            titulo: 'El Dilema Técnico: Los Bits R y M',
+            items: [
+              'El paginador externo (política) necesita conocer los bits R (referencia) y M (modificación) de cada página para tomar decisiones de reemplazo.',
+              'Problema: solo el kernel (mecanismo) tiene acceso a la MMU donde residen estos bits.',
+              'Solución A — Pasar info constantemente: el kernel envía los bits R y M al paginador externo en cada fallo. Es lento por la comunicación constante entre kernel y usuario.',
+              'Solución B — Dejar algoritmo en kernel: el kernel mismo ejecuta la política de reemplazo. Rompe la separación y hace al kernel menos modular.',
+            ],
+          },
         ],
         conceptos: [
-          { nombre: 'Principio de Separación', descripcion: 'Divide la administración en mecanismo (kernel) y política (usuario). Mantiene el kernel modular.' },
-          { nombre: 'Dilema Técnico del Acceso', descripcion: 'El paginador externo necesita bits R/M pero solo el kernel accede a la MMU.' },
+          { nombre: 'Principio de Separación', descripcion: 'Divide la administración de memoria en mecanismo (kernel: ejecuta acciones a nivel hardware) y política (usuario: decide qué y cuándo hacerlo). Mantiene el kernel pequeño, modular y portable entre arquitecturas.' },
+          { nombre: 'Dilema Técnico del Acceso (Bits R y M)', descripcion: 'El paginador externo necesita los bits R y M para decidir el reemplazo, pero solo el kernel puede acceder a la MMU. Soluciones: pasar la info constantemente (lento) o ejecutar la política en kernel (rompe separación).' },
         ],
       },
     ],
