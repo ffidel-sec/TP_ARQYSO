@@ -297,23 +297,6 @@ export const contenido = {
               'La compactación tiene un costo alto: el SO tiene que mover segmentos en memoria y actualizar las tablas de segmentos. No es gratis.',
             ],
           },
-          {
-            static: true,
-            numbered: true,
-            titulo: 'Las estructuras de control',
-            items: [
-              'Cuando un proceso quiere acceder a un dato, la CPU genera una dirección virtual de 34 bits dividida en tres partes: 18 bits para el número de segmento, 6 bits para el número de página, y 10 bits para el desplazamiento dentro de la página.',
-              'El algoritmo es el siguiente:',
-            ],
-            algorithm: [
-              'La CPU recibe la dirección virtual de 34 bits del proceso activo.',
-              'Busca el PCB del proceso, que le da la dirección al segmento del descriptor.',
-              'Usa los 18 bits para encontrar el descriptor del segmento correspondiente dentro del segmento del descriptor.',
-              'El descriptor apunta a la tabla de páginas de ese segmento. Usa los 6 bits para encontrar la página exacta y obtener el marco físico en RAM.',
-              'Suma los 10 bits de offset al marco físico para llegar a la palabra exacta dentro de la página.',
-            ],
-            conclusion: 'Sin optimización esto implica 3 accesos a RAM solo para traducir la dirección. Por eso existe el TLB.',
-          },
         ],
       },
       {
