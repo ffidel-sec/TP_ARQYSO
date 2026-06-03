@@ -237,36 +237,54 @@ export const contenido = {
   },
   'segmentacion': {
     introduccion:
-      'La segmentación es una técnica de administración de memoria que divide el espacio de direcciones de un programa en segmentos lógicos de tamaño variable, como código, datos y pila. A diferencia de la paginación, que usa bloques de tamaño fijo, la segmentación permite que cada segmento crezca según las necesidades del programa.',
+      'La memoria virtual analizada anteriormente es unidimensional, debido a que las direcciones virtuales van desde 0 hasta cierta dirección máxima, una dirección después de la otra. Para muchos problemas, tener dos o más espacios de direcciones virtuales separados puede ser mucho mejor que tener sólo uno. Por ejemplo, un compilador tiene muchas tablas que se generan a medida que procede la compilación.',
     secciones: [
       {
-        titulo: 'Concepto de segmentación',
+        static: true,
+        titulo: 'El Problema de la Memoria Unidimensional',
         items: [
-          'Cada segmento tiene un nombre y una longitud específica.',
-          'Las direcciones lógicas se expresan como (número de segmento, desplazamiento).',
-          'La tabla de segmentos (en la CPU) mapea cada segmento a su base y límite en memoria física.',
+          'Un compilador maneja diversas tablas que crecen dinámicamente: el código fuente, la tabla de símbolos, constantes, el árbol de análisis sintáctico y la pila de llamadas.',
+          'En una memoria unidimensional, estas tablas deben colocarse en trozos contiguos.',
+          'Si una tabla crece demasiado, puede chocar con otra, incluso si hay espacio libre en otras partes del espacio de direcciones virtual.',
         ],
       },
       {
-        titulo: 'Ventajas',
+        static: true,
+        titulo: 'El Concepto de Segmentos',
+        intro: 'La solución es proporcionar segmentos: espacios de direcciones independientes.',
+        figura: 'segmentos',
         items: [
-          'Facilita el crecimiento dinámico de estructuras de datos.',
-          'Permite compartir segmentos entre procesos (ej. bibliotecas compartidas).',
-          'Simplifica la protección de memoria por segmento (lectura/escritura/ejecución).',
+          'Definición: Cada segmento es una secuencia lineal de direcciones que van desde 0 hasta un máximo permitido.',
+          'Flexibilidad: Los segmentos pueden tener distintas longitudes y estas pueden cambiar durante la ejecución (por ejemplo, una pila que crece al meter datos).',
+          'Independencia: Al ser espacios separados, un segmento puede crecer o reducirse sin afectar a los demás.',
+          'Direccionamiento: Para especificar una dirección, el programa debe usar una dirección de dos partes: (número de segmento, dirección dentro del segmento).',
         ],
       },
       {
-        titulo: 'Desventajas',
+        static: true,
+        titulo: 'Características y Ventajas de la Segmentación',
+        intro: 'A diferencia de la paginación, el segmento es una entidad lógica de la que el programador es consciente. Normalmente, un segmento contiene un solo tipo de objeto, como un procedimiento, un arreglo o una pila.',
         items: [
-          'Fragmentación externa: los agujeros entre segmentos dificultan la asignación.',
-          'Requiere gestión compleja de memoria para compactación.',
-          'Los segmentos de tamaño variable hacen más complejo el reemplazo en disco.',
+          'Simplificación de la Vinculación: Si cada procedimiento ocupa un segmento separado empezando en la dirección 0, vincular procedimientos compilados por separado es mucho más simple.',
+          'Facilidad de Recopilación: Si un procedimiento en un segmento se modifica y crece, no es necesario cambiar las direcciones iniciales de los demás procedimientos, algo que sí ocurriría en una memoria unidimensional donde están empaquetados estrechamente.',
+          'Compartición de Código y Datos: Permite que varios procesos compartan, por ejemplo, una biblioteca gráfica colocándola en un segmento común, eliminando la necesidad de que cada proceso tenga su propia copia.',
+          'Protección Diferenciada: Dado que cada segmento es una entidad lógica homogénea (solo código o solo datos), se pueden aplicar diferentes tipos de protección. Un segmento de procedimiento puede ser de "solo ejecución", mientras que un arreglo de datos puede ser de "lectura/escritura" pero no ejecutable, lo que ayuda a atrapar errores de programación.',
+        ],
+      },
+      {
+        static: true,
+        titulo: 'Comparación con la Paginación',
+        items: [
+          'Mientras que la paginación es "transparente", la segmentación es una técnica de la que el usuario es consciente para organizar lógicamente sus programas.',
+          'Segmentación: Se inventó para permitir que programas y datos se dividan en espacios lógicamente independientes, facilitando la compartición y la protección.',
         ],
       },
     ],
     conceptos: [
-      { nombre: 'Tabla de Segmentos', descripcion: 'Estructura en la CPU que contiene la base y el límite de cada segmento en memoria física.' },
-      { nombre: 'Fragmentación Externa', descripcion: 'Espacio libre no contiguo entre segmentos que dificulta asignar nuevos segmentos grandes.' },
+      { nombre: 'Segmento', descripcion: 'Espacio de direcciones independiente, de tamaño variable, que contiene una entidad lógica (código, datos, pila). Se identifica con un número y su dirección se expresa como (número de segmento, desplazamiento).' },
+      { nombre: 'Direccionamiento Bidimensional', descripcion: 'Esquema de direcciones de dos partes: (número de segmento, dirección dentro del segmento). Permite que cada segmento tenga su propio espacio de direcciones desde 0.' },
+      { nombre: 'Protección Diferenciada', descripcion: 'Capacidad de asignar permisos específicos (solo ejecución, lectura/escritura, etc.) a cada segmento según su tipo lógico, atrapando errores de programación.' },
+      { nombre: 'Compartición de Segmentos', descripcion: 'Mecanismo que permite que múltiples procesos accedan al mismo segmento (ej. bibliotecas compartidas) sin tener copias duplicadas en memoria.' },
     ],
     subtemas: [
       {

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { temas } from '../data/temas'
 import { contenido } from '../data/contenido'
+import FiguraSegmentos from '../components/FiguraSegmentos'
 
 const topicColors = [
   'from-indigo-500 to-purple-600',
@@ -15,6 +16,41 @@ const topicColors = [
   'from-lime-500 to-emerald-600',
   'from-red-500 to-rose-600',
 ]
+
+function StaticSection({ sec, index, color }) {
+  return (
+    <div className="bg-white dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm">
+      <div className="flex items-center gap-4 mb-4">
+        <span className={`flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br ${color} text-white flex items-center justify-center font-bold text-sm shadow-sm`}>
+          {index + 1}
+        </span>
+        <h3 className="text-base font-semibold text-slate-800 dark:text-slate-100">
+          {sec.titulo}
+        </h3>
+      </div>
+      {sec.intro && (
+        <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-[15px] mb-4 ml-14">
+          {sec.intro}
+        </p>
+      )}
+      {sec.figura === 'segmentos' && (
+        <div className="mb-4 -mx-6">
+          <FiguraSegmentos />
+        </div>
+      )}
+      {sec.items && (
+        <ul className="space-y-2.5 ml-14">
+          {sec.items.map((item, j) => (
+            <li key={j} className="text-slate-600 dark:text-slate-300 leading-relaxed flex items-start gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 dark:bg-indigo-500 mt-2.5 flex-shrink-0" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
 
 function SectionAccordion({ sec, index, isOpen, onToggle, color }) {
   const contentRef = useRef(null)
@@ -42,7 +78,12 @@ function SectionAccordion({ sec, index, isOpen, onToggle, color }) {
         className="transition-all duration-300 ease-in-out overflow-hidden"
         style={{ maxHeight: isOpen ? `${contentRef.current?.scrollHeight || 600}px` : '0px', opacity: isOpen ? 1 : 0 }}
       >
-        <div ref={contentRef} className="px-5 pb-5 pl-[4.25rem]">
+        <div ref={contentRef} className="px-5 pb-5 pl-[4.25rem] space-y-4">
+          {sec.intro && (
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-[15px]">
+              {sec.intro}
+            </p>
+          )}
           {sec.items && (
             <ul className="space-y-2.5">
               {sec.items.map((item, j) => (
@@ -52,6 +93,9 @@ function SectionAccordion({ sec, index, isOpen, onToggle, color }) {
                 </li>
               ))}
             </ul>
+          )}
+          {sec.figura === 'segmentos' && (
+            <FiguraSegmentos />
           )}
         </div>
       </div>
@@ -180,16 +224,20 @@ export default function TemaPage() {
         )}
 
         {data.secciones && data.secciones.length > 0 && data.tipo !== 'timeline' && (
-          <section className="space-y-3 mb-6">
+          <section className="space-y-4 mb-6">
             {data.secciones.map((sec, i) => (
               <div key={i} className="animate-fade-in-up" style={{animationDelay: `${i * 0.06}s`}}>
-                <SectionAccordion
-                  sec={sec}
-                  index={i}
-                  isOpen={!!openSections[i]}
-                  onToggle={() => toggleSection(i)}
-                  color={color}
-                />
+                {sec.static ? (
+                  <StaticSection sec={sec} index={i} color={color} />
+                ) : (
+                  <SectionAccordion
+                    sec={sec}
+                    index={i}
+                    isOpen={!!openSections[i]}
+                    onToggle={() => toggleSection(i)}
+                    color={color}
+                  />
+                )}
               </div>
             ))}
           </section>
