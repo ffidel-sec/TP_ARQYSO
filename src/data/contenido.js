@@ -336,31 +336,25 @@ export const contenido = {
           },
           {
             static: true,
-            titulo: 'Las estructuras de control',
+            numbered: true,
+            titulo: 'Traducción de dirección',
             items: [
-              'Primero, el SO mantiene un PCB — Process Control Block — por cada proceso. El PCB contiene la dirección al segmento del descriptor de su proceso. Cuando el SO cambia de proceso, carga esa dirección en el hardware y listo.',
-              'Segundo, el segmento del descriptor. Hay uno por proceso, y es básicamente la tabla maestra. Podemos pensarlo como el README de un repositorio — cada línea es un descriptor de un segmento distinto. Con solo leer el segmento del descriptor sabemos todo sobre la memoria del proceso.',
-              'Tercero, el descriptor del segmento. Es una estructura de 36 bits que funciona como el carnet de identidad de un segmento. Contiene el puntero a la tabla de páginas de ese segmento, los permisos de acceso — lectura, escritura, ejecución — y el tamaño en páginas.',
-              'Cuarto, la tabla de páginas. Hay una por segmento. Le dice al sistema en qué marco de RAM está cada página, o si está en disco esperando ser cargada.',
+              'Cuando un proceso quiere acceder a un dato, la CPU genera una dirección virtual de 34 bits dividida en tres partes: 18 bits para el número de segmento, 6 bits para el número de página, y 10 bits para el desplazamiento dentro de la página.',
+              'El algoritmo es el siguiente:',
             ],
+            algorithm: [
+              'La CPU recibe la dirección virtual de 34 bits del proceso activo.',
+              'Busca el PCB del proceso, que le da la dirección al segmento del descriptor.',
+              'Usa los 18 bits para encontrar el descriptor del segmento correspondiente dentro del segmento del descriptor.',
+              'El descriptor apunta a la tabla de páginas de ese segmento. Usa los 6 bits para encontrar la página exacta y obtener el marco físico en RAM.',
+              'Suma los 10 bits de offset al marco físico para llegar a la palabra exacta dentro de la página.',
+            ],
+            conclusion: 'Sin optimización esto implica 3 accesos a RAM solo para traducir la dirección. Por eso existe el TLB.',
           },
           {
             static: true,
             component: 'jerarquia-multics',
             titulo: 'Jerarquía de memoria en MULTICS',
-          },
-          {
-            static: true,
-            titulo: 'Traducción de dirección',
-            items: [
-              'Cuando la CPU quiere acceder a una dirección de memoria, esa dirección tiene 34 bits divididos en tres partes: 18 bits para el número de segmento, 6 bits para el número de página, y 10 bits para el desplazamiento dentro de la página.',
-              'El algoritmo es el siguiente:',
-              '1. El número de segmento se usa para encontrar el descriptor en el segmento del descriptor.',
-              '2. El descriptor apunta a la tabla de páginas de ese segmento.',
-              '3. El número de página busca en esa tabla y obtiene el marco físico en RAM.',
-              '4. Al marco se le suma el desplazamiento y se obtiene la dirección física final.',
-              'Sin optimización esto implica 3 accesos a RAM solo para traducir una dirección. Por eso existe el TLB.',
-            ],
           },
           {
             static: true,
@@ -377,6 +371,7 @@ export const contenido = {
           { nombre: 'Descriptor de segmento', descripcion: 'Estructura de 36 bits que identifica un segmento. Contiene puntero a su tabla de páginas, permisos de acceso (lectura, escritura, ejecución) y tamaño en páginas.' },
           { nombre: 'Segmento del descriptor', descripcion: 'Tabla maestra de un proceso que contiene todos los descriptores de sus segmentos. El PCB de cada proceso apunta a su segmento del descriptor.' },
           { nombre: 'PCB', descripcion: 'Process Control Block. Estructura del SO por cada proceso que contiene, entre otros datos, la dirección al segmento del descriptor. Cuando el SO cambia de proceso, carga esta dirección en el hardware.' },
+          { nombre: 'Palabra', descripcion: 'Unidad básica de datos que la CPU procesa nativamente. En MULTICS, cada palabra es de 36 bits.' },
         ],
       },
       {

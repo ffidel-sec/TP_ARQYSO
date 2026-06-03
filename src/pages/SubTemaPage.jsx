@@ -221,7 +221,30 @@ export default function SubTemaPage() {
                         <JerarquiaMultics />
                       </div>
                     )}
-                    {sec.items && (
+                    {sec.numbered ? (
+                      <div className="space-y-3">
+                        {sec.items?.map((item, j) => (
+                          <p key={j} className="text-slate-600 dark:text-slate-300 leading-relaxed flex items-start gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 dark:bg-indigo-500 mt-2.5 flex-shrink-0" />
+                            <span>{item}</span>
+                          </p>
+                        ))}
+                        {sec.algorithm && (
+                          <ol className="list-decimal list-inside space-y-2 ml-2 marker:text-indigo-500 dark:marker:text-indigo-400">
+                            {sec.algorithm.map((step, j) => (
+                              <li key={j} className="text-slate-600 dark:text-slate-300 leading-relaxed pl-1">
+                                {step}
+                              </li>
+                            ))}
+                          </ol>
+                        )}
+                        {sec.conclusion && (
+                          <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+                            {sec.conclusion}
+                          </p>
+                        )}
+                      </div>
+                    ) : sec.items && (
                       <ul className="space-y-2.5">
                         {sec.items.map((item, j) => (
                           <li key={j} className="text-slate-600 dark:text-slate-300 leading-relaxed flex items-start gap-2">
