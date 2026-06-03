@@ -297,6 +297,23 @@ export const contenido = {
               'La compactación tiene un costo alto: el SO tiene que mover segmentos en memoria y actualizar las tablas de segmentos. No es gratis.',
             ],
           },
+          {
+            static: true,
+            numbered: true,
+            titulo: 'Las estructuras de control',
+            items: [
+              'Cuando un proceso quiere acceder a un dato, la CPU genera una dirección virtual de 34 bits dividida en tres partes: 18 bits para el número de segmento, 6 bits para el número de página, y 10 bits para el desplazamiento dentro de la página.',
+              'El algoritmo es el siguiente:',
+            ],
+            algorithm: [
+              'La CPU recibe la dirección virtual de 34 bits del proceso activo.',
+              'Busca el PCB del proceso, que le da la dirección al segmento del descriptor.',
+              'Usa los 18 bits para encontrar el descriptor del segmento correspondiente dentro del segmento del descriptor.',
+              'El descriptor apunta a la tabla de páginas de ese segmento. Usa los 6 bits para encontrar la página exacta y obtener el marco físico en RAM.',
+              'Suma los 10 bits de offset al marco físico para llegar a la palabra exacta dentro de la página.',
+            ],
+            conclusion: 'Sin optimización esto implica 3 accesos a RAM solo para traducir la dirección. Por eso existe el TLB.',
+          },
         ],
       },
       {
@@ -455,14 +472,6 @@ export const contenido = {
               'Para cruzar niveles de forma controlada existen las compuertas de llamada (call gates): descriptores especiales que definen exactamente a qué puntos de entrada del código privilegiado se puede llamar mediante la instrucción CALL.',
               'El código de usuario nunca puede saltar a una dirección arbitraria del kernel, solo a los puntos de entrada oficiales.',
               'Este mecanismo fue inventado en MULTICS y el Pentium lo heredó directamente.',
-            ],
-          },
-          {
-            titulo: 'En la práctica, nadie usa la segmentación',
-            items: [
-              'Toda esta arquitectura tiene una ironía práctica. Linux, Windows y macOS definen todos sus segmentos con Base 0 y Límite máximo (4\u202fGB), lo que hace que la dirección lineal siempre sea igual al desplazamiento y la segmentación quede completamente anulada.',
-              'En la práctica, estos sistemas operativos usan el Pentium como si fuera un procesador de paginación pura, ignorando la segmentación para simplificar la portabilidad a otras arquitecturas.',
-              'Tanenbaum: "Todos los sistemas operativos actuales para el Pentium funcionan de esta manera [paginación pura]. OS/2 fue el único que utilizó todo el poder de la arquitectura Intel MMU."',
             ],
           },
         ],
