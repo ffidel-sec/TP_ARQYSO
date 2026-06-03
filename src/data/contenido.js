@@ -50,17 +50,33 @@ export const contenido = {
         ],
       },
       {
-        titulo: 'Asignación Local vs. Global',
+        titulo: 'Asignación Local',
         items: [
-          'Asignación Local: cuando el proceso A necesita espacio, el algoritmo solo puede elegir entre las páginas que le pertenecen al propio proceso A.',
-          'Asignación Global: cuando el proceso A necesita espacio, puede elegir una página de cualquier proceso del sistema, incluso de un proceso B si este no la está usando.',
+          'Cuando un proceso necesita espacio, el algoritmo solo puede elegir entre las páginas que le pertenecen al propio proceso.',
         ],
       },
       {
-        titulo: 'Prepaginación vs. Paginación por Demanda',
+        titulo: 'Prepaginación',
         items: [
-          'Prepaginación: el SO intenta adivinar qué páginas va a necesitar el programa basándose en su comportamiento anterior. Cuando se abre un programa, el SO trae un grupo de páginas consecutivas a la RAM de golpe.',
-          'Paginación por Demanda: cuando arranca un programa, este empieza con cero páginas en la RAM. A medida que el procesador ejecuta el código, se generan fallos de página y el SO las va trayendo del disco una por una.',
+          'El SO intenta adivinar qué páginas va a necesitar el programa basándose en su comportamiento anterior. Cuando se abre un programa, el SO trae un grupo de páginas consecutivas a la RAM de golpe.',
+        ],
+      },
+      {
+        titulo: 'Asignación Global',
+        items: [
+          'Cuando el proceso A necesita espacio, puede elegir una página de cualquier proceso del sistema, incluso de un proceso B si este no la esta usando.',
+        ],
+      },
+      {
+        titulo: 'Paginación por Demanda',
+        items: [
+          'Cuando arrancas un programa, este empieza con cero páginas en la RAM. A medida que el procesador ejecuta el código y va necesitando datos, se van generando "fallos de página" y el sistema operativo las va trayendo del disco una por una.',
+        ],
+      },
+      {
+        titulo: 'Memoria Virtual',
+        items: [
+          'Es una técnica del sistema operativo que utiliza parte de tu disco duro o SSD como una extensión de la memoria RAM física.',
         ],
       },
     ],
@@ -74,6 +90,11 @@ export const contenido = {
         nombre: 'FIFO',
         descripcion:
           'Algoritmo de reemplazo de páginas donde la página que lleva más tiempo en memoria es la primera en ser expulsada. Simple pero propenso a reemplazar páginas muy usadas.',
+      },
+      {
+        nombre: 'Paginación por Demanda',
+        descripcion:
+          'Cuando arrancas un programa, este empieza con cero páginas en la RAM. A medida que el procesador ejecuta el código y va necesitando datos, se van generando "fallos de página" y el sistema operativo las va trayendo del disco una por una.',
       },
     ],
     conclusion:
@@ -90,7 +111,7 @@ export const contenido = {
         secciones: [
           { titulo: 'Al crear el proceso', items: ['Determina el tamaño inicial del programa y sus datos.', 'Crea e inicializa la tabla de páginas en memoria.', 'Reserva espacio en el área de intercambio (swap) del disco.'] },
           { titulo: 'Al ejecutar el proceso', items: ['Restablece la MMU para el nuevo proceso.', 'Vacía el TLB para borrar el rastro del proceso anterior.', 'Carga la tabla de páginas en la MMU.', 'Opcionalmente, precarga algunas páginas.'] },
-          { titulo: 'Al ocurrir un fallo de página', items: ['Lee los registros de hardware para identificar la dirección.', 'Busca la página en el disco.', 'Encuentra un marco libre (o desaloja uno).', 'Carga la página y actualiza la tabla.', 'Respaldan el PC para reintentar la instrucción.'] },
+          { titulo: 'Al ocurrir un fallo de página', items: ['Lee los registros de hardware para identificar la dirección.', 'Busca la página en el disco.', 'Encuentra un marco libre (o desaloja uno).', 'Carga la página y actualiza la tabla.', 'Respalda el PC para reintentar la instrucción correspondiente a la Página.'] },
           { titulo: 'Al terminar el proceso', items: ['Libera la tabla de páginas y los marcos.', 'Libera el espacio en disco.', 'Si hay páginas compartidas, espera al último proceso.'] },
         ],
         conceptos: [
@@ -107,19 +128,21 @@ export const contenido = {
         introduccion:
           'Cuando un proceso intenta acceder a una página que no está en memoria física, el hardware genera una secuencia de 10 pasos orquestados entre hardware, SO y disco.',
         secciones: [
-          { titulo: 'Trap', items: ['El hardware genera un trap al kernel y guarda el PC en la pila.'] },
+          { titulo: 'Trap', items: ['El hardware hace un trap al kernel, guardando el contador de programa en la pila.'] },
           { titulo: 'Guardado de estado', items: ['Una rutina en ensamblador guarda los registros generales y la información volátil de la CPU.'] },
           { titulo: 'Identificación', items: ['El SO determina qué página virtual se necesita leyendo registros de hardware.'] },
           { titulo: 'Verificación y Reemplazo', items: ['El SO comprueba si la dirección es válida, busca un marco libre o ejecuta el algoritmo de reemplazo.'] },
           { titulo: 'Escritura (si está sucia)', items: ['Si la página víctima fue modificada, se planifica su escritura en disco y se suspende el proceso.'] },
           { titulo: 'Lectura', items: ['El SO busca la página en disco y planifica su lectura. El proceso sigue suspendido.'] },
           { titulo: 'Actualización', items: ['Al terminar la lectura, se actualizan las tablas de páginas y el marco se marca como normal.'] },
-          { titulo: 'Respaldo del PC', items: ['Se restablece el PC al estado previo al fallo.'] },
+          { titulo: 'Respaldo del Contador de Programa', items: ['Se restablece el Contador de Programa al estado previo al fallo.'] },
           { titulo: 'Planificación', items: ['El proceso se vuelve a planificar y el SO regresa a la rutina ensamblador.'] },
           { titulo: 'Reanudación', items: ['La rutina recarga los registros y el proceso continúa como si nada hubiera pasado.'] },
         ],
         conceptos: [
           { nombre: 'Trap', descripcion: 'Señal que el procesador genera para pausar un programa y ceder el control al kernel.' },
+          { nombre: 'Contador de Programa', descripcion: 'Es un registro fundamental dentro de la Unidad Central de Procesamiento (CPU) de una computadora.' },
+          { nombre: 'Pila', descripcion: 'Es un área de memoria asignada a cada programa en ejecución. Funciona como una estructura de datos del tipo "FIFO" (Primero en entrar, primero en salir).' },
         ],
       },
       {
@@ -134,7 +157,7 @@ export const contenido = {
       {
         id: '3.6.4',
         slug: 'bloqueo-de-paginas-en-memoria',
-        titulo: 'Bloqueo de páginas en memoria (Pinning)',
+        titulo: 'Bloqueo de páginas en memoria',
         presentador: 'Briguera Mateo',
         introduccion:
           'Existe un peligro crítico cuando interactúan la memoria virtual y las operaciones de E/S. Si un proceso se suspende durante una transferencia DMA, sus páginas pueden ser desalojadas, corrompiendo datos.',

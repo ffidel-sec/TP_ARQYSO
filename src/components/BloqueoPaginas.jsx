@@ -100,6 +100,34 @@ export default function BloqueoPaginas({ data }) {
           ))}
         </div>
       </div>
+
+      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/50 dark:to-purple-950/50 rounded-2xl border border-indigo-100 dark:border-indigo-800/50 p-6 md:p-8 transition-colors">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-200/20 rounded-full blur-2xl" />
+        <h2 className="text-lg font-semibold text-indigo-800 dark:text-indigo-300 mb-5 flex items-center gap-2">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+          </svg>
+          Conceptos clave
+        </h2>
+        <div className="grid gap-4 sm:grid-cols-2 relative">
+          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl border border-indigo-100 dark:border-indigo-800/50 p-5 hover:shadow-md transition-all duration-200 animate-fade-in-up">
+            <span className="inline-block text-white text-xs font-bold px-2.5 py-1 rounded-lg mb-3 bg-gradient-to-r from-indigo-500 to-purple-600">
+              Buffer
+            </span>
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Es un espacio de almacenamiento temporal de datos o información.
+            </p>
+          </div>
+          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl border border-indigo-100 dark:border-indigo-800/50 p-5 hover:shadow-md transition-all duration-200 animate-fade-in-up">
+            <span className="inline-block text-white text-xs font-bold px-2.5 py-1 rounded-lg mb-3 bg-gradient-to-r from-indigo-500 to-purple-600">
+              DMA (Direct Memory Access)
+            </span>
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Es una técnica del hardware que permite a ciertos componentes (como tarjetas gráficas o discos duros) acceder directamente a la memoria principal del sistema (RAM) sin tener que pasar por la Unidad Central de Procesamiento (CPU).
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }
