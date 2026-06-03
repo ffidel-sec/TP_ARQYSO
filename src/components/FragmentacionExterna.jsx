@@ -119,10 +119,18 @@ function MemoryColumn({ step, maxH }) {
 }
 
 function DesktopView() {
+  const [hovered, setHovered] = useState(-1)
+
   return (
     <div className="hidden sm:flex gap-3 justify-center">
       {steps.map((step, i) => (
-        <div key={i} className="flex flex-col items-center gap-1 flex-1 min-w-0">
+        <div
+          key={i}
+          className={`flex flex-col items-center gap-1 flex-1 min-w-0 transition-all duration-200 ${hovered === i ? 'scale-110 z-10' : 'scale-100 z-0'}`}
+          style={{ transformOrigin: 'center center' }}
+          onMouseEnter={() => setHovered(i)}
+          onMouseLeave={() => setHovered(-1)}
+        >
           <MemoryColumn step={step} maxH={MAX_H} />
           <span className="font-mono text-xs font-semibold text-slate-700 dark:text-slate-300">
             {step.label}
