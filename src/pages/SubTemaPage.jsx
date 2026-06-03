@@ -5,6 +5,7 @@ import { subtemasPorSlug } from '../data/contenido'
 import FragmentacionExterna from '../components/FragmentacionExterna'
 import ParticipacionSO from '../components/ParticipacionSO'
 import FigurasPentium from '../components/FigurasPentium'
+import JerarquiaMultics from '../components/JerarquiaMultics'
 
 const topicColors = [
   'from-indigo-500 to-purple-600',
@@ -198,6 +199,11 @@ export default function SubTemaPage() {
                     {sec.component === 'fragmentacion-externa' && (
                       <div className="mb-4">
                         <FragmentacionExterna />
+                      </div>
+                    )}
+                    {sec.component === 'jerarquia-multics' && (
+                      <div className="mb-4">
+                        <JerarquiaMultics />
                       </div>
                     )}
                     {sec.items && (

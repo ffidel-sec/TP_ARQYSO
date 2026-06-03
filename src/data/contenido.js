@@ -297,7 +297,7 @@ export const contenido = {
             static: true,
             component: 'fragmentacion-externa',
             titulo: 'Fragmentación externa y compactación',
-            intro: 'Se diferencia de la paginación principalmente en que las páginas tienen un tamaño físico y los segmentos no.',
+            intro: 'Se diferencia de la paginación principalmente en que las páginas tienen un tamaño fijo y los segmentos no.',
             items: [
               'Este es el principal problema de la Segmentación pura.',
               'En este recuadro podemos ver cómo se desarrolla la Fragmentación Externa (efecto tablero de ajedrez), donde básicamente, los segmentos grandes se van liberando (los procesos finalizan) y van siendo ocupados por segmentos más pequeños, lo que genera que hayan pequeñas porciones de memoria desperdiciadas.',
@@ -313,14 +313,78 @@ export const contenido = {
         titulo: 'Segmentación con paginación: MULTICS',
         presentador: 'Grando Fidel',
         introduccion:
-          'MULTICS (Multiplexed Information and Computing Service) combinó segmentación y paginación para obtener lo mejor de ambos mundos: segmentos lógicos de tamaño variable con paginación interna que elimina la fragmentación externa.',
+          'MULTICS (Multiplexed Information and Computing Service) es un sistema operativo que tuvo su primera versión funcional en 1969. Para entender por qué existe, primero tenemos que entender el problema que resolvió.',
         secciones: [
-          { titulo: 'Arquitectura MULTICS', items: ['Cada segmento se divide en páginas de tamaño fijo.', 'La dirección lógica tiene tres niveles: (segmento, página, desplazamiento).', 'Dos niveles de tablas: tabla de segmentos (por proceso) y tabla de páginas (por segmento).'] },
-          { titulo: 'Ventajas de la combinación', items: ['Segmentos lógicos visibles al programador.', 'Paginación interna que evita la fragmentación externa.', 'Cada segmento puede paginarse independientemente.'] },
-          { titulo: 'Protección y compartición', items: ['Los segmentos compartidos se marcan en la tabla de segmentos.', 'Diferentes procesos pueden tener distintos permisos sobre el mismo segmento.', 'La paginación permite que las páginas de un segmento estén dispersas en RAM.'] },
+          {
+            static: true,
+            titulo: 'El problema',
+            items: [
+              'Antes de MULTICS, los programas se cargaban enteros en memoria RAM. Si un programa ocupaba 512 megabytes pero estaba usando solo el 10%, los 460 megabytes restantes quedaban ocupando RAM en vano. Con varios usuarios corriendo programas al mismo tiempo, la RAM se agotaba rapidísimo.',
+              'La solución que propusieron los desarrolladores fue combinar dos técnicas: segmentación y paginación.',
+            ],
+          },
+          {
+            static: true,
+            titulo: 'Segmentación',
+            items: [
+              'La segmentación consiste en dividir cada programa en partes lógicas llamadas segmentos. Cada parte tiene una función distinta:',
+              'El segmento de código tiene las instrucciones en lenguaje máquina, los MOV, JMP, ADD que ejecuta la CPU.',
+              'El segmento de stack tiene las variables locales, parámetros de funciones y direcciones de retorno.',
+              'El segmento de heap tiene los objetos creados dinámicamente.',
+              'MULTICS proveía a cada programa hasta 250.000 segmentos, y cada uno podía tener hasta 65.536 palabras de 36 bits.',
+            ],
+          },
+          {
+            static: true,
+            titulo: 'Paginación',
+            items: [
+              'Ahora bien, si un segmento era muy grande y solo se usaba una parte, seguíamos teniendo el mismo problema. Entonces los desarrolladores optaron por paginar cada segmento — es decir, dividirlo en bloques de tamaño fijo llamados páginas.',
+              'Las páginas contienen los bytes crudos del segmento. Si una página no se está usando, se manda al disco. Cuando se necesita, se carga de vuelta a RAM. De esta forma, solo ocupan RAM las páginas que realmente se están usando en ese momento.',
+            ],
+          },
+          {
+            static: true,
+            titulo: 'Las estructuras de control',
+            items: [
+              'Primero, el SO mantiene un PCB — Process Control Block — por cada proceso. El PCB contiene la dirección al segmento del descriptor de su proceso. Cuando el SO cambia de proceso, carga esa dirección en el hardware y listo.',
+              'Segundo, el segmento del descriptor. Hay uno por proceso, y es básicamente la tabla maestra. Podemos pensarlo como el README de un repositorio — cada línea es un descriptor de un segmento distinto. Con solo leer el segmento del descriptor sabemos todo sobre la memoria del proceso.',
+              'Tercero, el descriptor del segmento. Es una estructura de 36 bits que funciona como el carnet de identidad de un segmento. Contiene el puntero a la tabla de páginas de ese segmento, los permisos de acceso — lectura, escritura, ejecución — y el tamaño en páginas.',
+              'Cuarto, la tabla de páginas. Hay una por segmento. Le dice al sistema en qué marco de RAM está cada página, o si está en disco esperando ser cargada.',
+            ],
+          },
+          {
+            static: true,
+            component: 'jerarquia-multics',
+            titulo: 'Jerarquía de memoria en MULTICS',
+          },
+          {
+            static: true,
+            titulo: 'Traducción de dirección',
+            items: [
+              'Cuando la CPU quiere acceder a una dirección de memoria, esa dirección tiene 34 bits divididos en tres partes: 18 bits para el número de segmento, 6 bits para el número de página, y 10 bits para el desplazamiento dentro de la página.',
+              'El algoritmo es el siguiente:',
+              '1. El número de segmento se usa para encontrar el descriptor en el segmento del descriptor.',
+              '2. El descriptor apunta a la tabla de páginas de ese segmento.',
+              '3. El número de página busca en esa tabla y obtiene el marco físico en RAM.',
+              '4. Al marco se le suma el desplazamiento y se obtiene la dirección física final.',
+              'Sin optimización esto implica 3 accesos a RAM solo para traducir una dirección. Por eso existe el TLB.',
+            ],
+          },
+          {
+            static: true,
+            titulo: 'TLB',
+            items: [
+              'El TLB es una caché dentro de la CPU que guarda las 16 traducciones más recientes. Cuando llega una dirección, el hardware la busca en el TLB en paralelo. Si está, obtiene el marco directamente en un ciclo. Si no está, recorre toda la cadena y guarda el resultado en TLB para la próxima vez.',
+              'MULTICS fue un sistema adelantado para su época. Muchas de sus ideas están presentes en todos los sistemas operativos que usamos hoy. La última instancia de MULTICS se apagó en el año 2000, después de correr durante 30 años.',
+            ],
+          },
         ],
         conceptos: [
-          { nombre: 'MULTICS', descripcion: 'Sistema operativo pionero que combinó segmentación con paginación, inspirando diseños modernos como el de Intel Pentium.' },
+          { nombre: 'MULTICS', descripcion: 'Sistema operativo pionero (1969) que combinó segmentación con paginación. Ofrecía hasta 250.000 segmentos por programa, cada uno con hasta 65.536 palabras de 36 bits. Su última instancia se apagó en el año 2000 tras 30 años de operación.' },
+          { nombre: 'TLB', descripcion: 'Caché dentro de la CPU que guarda las 16 traducciones de dirección más recientes. Permite traducir una dirección virtual a física en un solo ciclo de reloj cuando hay acierto.' },
+          { nombre: 'Descriptor de segmento', descripcion: 'Estructura de 36 bits que identifica un segmento. Contiene puntero a su tabla de páginas, permisos de acceso (lectura, escritura, ejecución) y tamaño en páginas.' },
+          { nombre: 'Segmento del descriptor', descripcion: 'Tabla maestra de un proceso que contiene todos los descriptores de sus segmentos. El PCB de cada proceso apunta a su segmento del descriptor.' },
+          { nombre: 'PCB', descripcion: 'Process Control Block. Estructura del SO por cada proceso que contiene, entre otros datos, la dirección al segmento del descriptor. Cuando el SO cambia de proceso, carga esta dirección en el hardware.' },
         ],
       },
       {
