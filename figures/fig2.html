@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Dirección Lineal</title>
+<style>
+  body { background-color: #1e1e1e; color: #fff; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+  .diagram { display: flex; align-items: center; gap: 20px; }
+  .col { display: flex; flex-direction: column; gap: 20px; }
+  .box { padding: 15px 20px; border-radius: 6px; text-align: center; font-weight: bold; border: 1px solid #555; }
+  .selector { background-color: #403b8c; }
+  .offset { background-color: #444; }
+  .descriptor { background-color: #0b5946; padding: 20px; }
+  .descriptor small { display: block; font-weight: normal; font-size: 12px; margin-top: 5px; color: #aaa; }
+  .linear { background-color: #7b4b10; padding: 20px; }
+  .linear small { display: block; font-weight: normal; font-size: 12px; margin-top: 5px; color: #ddd; }
+  .arrow { color: #888; font-size: 24px; font-weight: bold; }
+</style>
+</head>
+<body>
+  <div class="diagram">
+    <div class="col">
+      <div class="box selector">Selector</div>
+      <div class="box offset">Desplazamiento</div>
+    </div>
+    <div class="arrow">&rarr;</div>
+    <div class="box descriptor">
+      Descriptor
+      <small>Base + Límite + Protección</small>
+    </div>
+    <div class="arrow">+ &rarr;</div>
+    <div class="box linear">
+      Dirección lineal
+      <small>32 bits &rarr; entra a paginación</small>
+    </div>
+  </div>
+</body>
+</html>

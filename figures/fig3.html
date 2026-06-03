@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Paginación</title>
+<style>
+  body { background-color: #1e1e1e; color: #fff; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+  .row { display: flex; gap: 20px; margin-bottom: 30px; align-items: center; }
+  .box { padding: 15px; border-radius: 6px; text-align: center; font-weight: bold; width: 160px; border: 1px solid #555; }
+  .blue { background-color: #0d47a1; }
+  .green { background-color: #0b5946; }
+  .grey { background-color: #444; }
+  .brown { background-color: #7b4b10; }
+  .red { background-color: #8c3b28; }
+  .box small { display: block; font-weight: normal; font-size: 12px; margin-top: 5px; color: #ccc; }
+  .arrow { color: #888; font-size: 20px; text-align: center; }
+  .arrow-down { margin: -20px 0 10px 0; }
+  p { color: #bbb; font-size: 14px; margin-top: 20px; text-align: center;}
+</style>
+</head>
+<body>
+  <div style="display: flex; flex-direction: column; align-items: flex-start;">
+      <div class="row" style="margin-bottom: 5px;">
+        <div class="box blue">Dir (10 bits)</div>
+        <div class="box green">Página (10 bits)</div>
+        <div class="box grey">Desplazamiento (12)</div>
+      </div>
+      
+      <div class="row" style="margin-bottom: 5px; gap: 160px;">
+        <div class="arrow arrow-down" style="margin-left: 80px;">&darr;</div>
+        <div class="arrow arrow-down">&darr;</div>
+      </div>
+
+      <div class="row">
+        <div class="box blue">Directorio<small>1024 entradas</small></div>
+        <div class="arrow">&rarr;</div>
+        <div class="box green">Tabla de páginas<small>1024 entradas</small></div>
+        <div class="arrow">&rarr;</div>
+        <div class="box brown">Marco físico<small>número de frame</small></div>
+        <div class="arrow">+</div>
+        <div class="box red">Dir. física<small>byte en RAM</small></div>
+      </div>
+  </div>
+  <p>TLB cachea las combinaciones Dir+Página más recientes &rarr; traducción instantánea</p>
+</body>
+</html>
