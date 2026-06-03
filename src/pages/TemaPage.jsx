@@ -223,7 +223,35 @@ export default function TemaPage() {
           </section>
         )}
 
-        {data.secciones && data.secciones.length > 0 && data.tipo !== 'timeline' && (
+        {data.secciones && data.secciones.length > 0 && data.tipo !== 'timeline' && slug === 'cuestiones-de-implementacion' && (
+          <section className="relative overflow-hidden bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/50 dark:to-purple-950/50 rounded-2xl border border-indigo-100 dark:border-indigo-800/50 p-6 md:p-8 mb-6 transition-colors">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-200/20 rounded-full blur-2xl" />
+            <h2 className="text-lg font-semibold text-indigo-800 dark:text-indigo-300 mb-5 flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+              </svg>
+              Conceptos clave
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2 relative">
+              {data.secciones.map((sec, i) => (
+                <div
+                  key={i}
+                  className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl border border-indigo-100 dark:border-indigo-800/50 p-5 hover:shadow-md transition-all duration-200 animate-fade-in-up"
+                  style={{animationDelay: `${i * 0.1}s`}}
+                >
+                  <span className={`inline-block text-white text-xs font-bold px-2.5 py-1 rounded-lg mb-3 bg-gradient-to-r ${color}`}>
+                    {sec.titulo}
+                  </span>
+                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                    {sec.items?.[0]}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {data.secciones && data.secciones.length > 0 && data.tipo !== 'timeline' && slug !== 'cuestiones-de-implementacion' && (
           <section className="space-y-4 mb-6">
             {data.secciones.map((sec, i) => (
               <div key={i} className="animate-fade-in-up" style={{animationDelay: `${i * 0.06}s`}}>
@@ -243,49 +271,7 @@ export default function TemaPage() {
           </section>
         )}
 
-        {data.desarrollo && !data.secciones && (
-          <section className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 md:p-8 mb-6 transition-colors">
-            <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-4">Desarrollo</h2>
-            <ul className="space-y-3">
-              {data.desarrollo.map((punto, i) => (
-                <li key={i} className="text-slate-600 dark:text-slate-300 leading-relaxed flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-2.5 flex-shrink-0" />
-                  {punto}
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-
-        {data.conceptos && !data.subtemas && (
-          <section className="relative overflow-hidden bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/50 dark:to-purple-950/50 rounded-2xl border border-indigo-100 dark:border-indigo-800/50 p-6 md:p-8 mb-6 transition-colors">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-200/20 rounded-full blur-2xl" />
-            <h2 className="text-lg font-semibold text-indigo-800 dark:text-indigo-300 mb-5 flex items-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-              </svg>
-              Conceptos clave
-            </h2>
-            <div className="grid gap-4 sm:grid-cols-2 relative">
-              {data.conceptos.map((c, i) => (
-                <div
-                  key={i}
-                  className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl border border-indigo-100 dark:border-indigo-800/50 p-5 hover:shadow-md transition-all duration-200 animate-fade-in-up"
-                  style={{animationDelay: `${i * 0.1}s`}}
-                >
-                  <span className={`inline-block text-white text-xs font-bold px-2.5 py-1 rounded-lg mb-3 bg-gradient-to-r ${color}`}>
-                    {c.nombre}
-                  </span>
-                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                    {c.descripcion}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {data.conclusion && !data.subtemas && (
+        {data.conclusion && slug !== 'cuestiones-de-implementacion' && (
           <section className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 md:p-8 mb-10 transition-colors">
             <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-3 flex items-center gap-2">
               <svg className="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">

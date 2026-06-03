@@ -6,6 +6,9 @@ import FragmentacionExterna from '../components/FragmentacionExterna'
 import ParticipacionSO from '../components/ParticipacionSO'
 import FigurasPentium from '../components/FigurasPentium'
 import JerarquiaMultics from '../components/JerarquiaMultics'
+import RespaldoInstruccion from '../components/RespaldoInstruccion'
+import BloqueoPaginas from '../components/BloqueoPaginas'
+import ManejoFallas from '../components/ManejoFallas'
 
 const topicColors = [
   'from-indigo-500 to-purple-600',
@@ -174,6 +177,18 @@ export default function SubTemaPage() {
           <section className="mb-6">
             <ParticipacionSO data={st} />
           </section>
+        ) : st.componente === 'respaldo-instruccion' ? (
+          <section className="mb-6">
+            <RespaldoInstruccion data={st} />
+          </section>
+        ) : st.componente === 'bloqueo-paginas' ? (
+          <section className="mb-6">
+            <BloqueoPaginas data={st} />
+          </section>
+        ) : st.componente === 'manejo-fallas' ? (
+          <section className="mb-6">
+            <ManejoFallas data={st} />
+          </section>
         ) : st.tipo === 'timeline' ? (
           <section className="mb-6 pl-2">
             {st.secciones?.map((sec, i) => (
@@ -230,6 +245,25 @@ export default function SubTemaPage() {
             ))}
           </section>
         ) : null}
+
+        {st.solucion && (
+          <section className="bg-white dark:bg-slate-800/80 rounded-2xl border border-emerald-200 dark:border-emerald-800/50 p-6 md:p-8 mb-6 shadow-sm transition-colors animate-fade-in-up">
+            <h3 className="text-base font-semibold text-slate-800 dark:text-slate-100 mb-4 flex items-center gap-2">
+              <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {st.solucion.titulo}
+            </h3>
+            <ul className="space-y-2.5">
+              {st.solucion.items.map((item, j) => (
+                <li key={j} className="text-slate-600 dark:text-slate-300 leading-relaxed flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 dark:bg-emerald-500 mt-2.5 flex-shrink-0" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         {st.conceptos && !st.componente && (
           <section className="relative overflow-hidden bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/50 dark:to-purple-950/50 rounded-2xl border border-indigo-100 dark:border-indigo-800/50 p-6 md:p-8 mb-6 transition-colors">

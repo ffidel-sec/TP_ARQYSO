@@ -103,7 +103,7 @@ export const contenido = {
         slug: 'manejo-de-fallas-de-pagina',
         titulo: 'Manejo de fallas de página',
         presentador: 'Briguera Mateo',
-        tipo: 'timeline',
+        componente: 'manejo-fallas',
         introduccion:
           'Cuando un proceso intenta acceder a una página que no está en memoria física, el hardware genera una secuencia de 10 pasos orquestados entre hardware, SO y disco.',
         secciones: [
@@ -127,13 +127,9 @@ export const contenido = {
         slug: 'respaldo-de-instruccion',
         titulo: 'Respaldo de Instrucción',
         presentador: 'Briguera Mateo',
+        componente: 'respaldo-instruccion',
         introduccion:
-          'Cuando ocurre un fallo de página a mitad de una instrucción, el SO debe reiniciarla desde el principio. Esto es complejo porque la instrucción pudo haberse ejecutado parcialmente.',
-        secciones: [
-          { titulo: 'Ambigüedad del PC', items: ['En arquitecturas complejas, el fallo puede ocurrir en cualquier punto. El PC puede apuntar a lugares intermedios.', 'El SO no sabe con certeza dónde empezaba la instrucción.'] },
-          { titulo: 'Efectos secundarios', items: ['Si una instrucción modifica un registro antes del fallo, el SO debe deducir si el cambio ocurrió.', 'Debe deshacer el efecto en software antes de reiniciar.'] },
-          { titulo: 'Solución en CPU modernas', items: ['Registros ocultos que guardan copia exacta del PC antes de cada instrucción.', 'Registran qué efectos secundarios ya se completaron.', 'Si la CPU no los tiene, el SO debe analizar la instrucción por software.'] },
-        ],
+          'Cuando ocurre un fallo de página a mitad de una instrucción, el SO tiene que reiniciarla desde el principio. Esto puede llegar a ser sumamente complejo debido a:',
       },
       {
         id: '3.6.4',
@@ -142,11 +138,7 @@ export const contenido = {
         presentador: 'Briguera Mateo',
         introduccion:
           'Existe un peligro crítico cuando interactúan la memoria virtual y las operaciones de E/S. Si un proceso se suspende durante una transferencia DMA, sus páginas pueden ser desalojadas, corrompiendo datos.',
-        secciones: [
-          { titulo: 'El problema', items: ['El dispositivo escribe directamente en memoria física mediante DMA.', 'Si la página del búfer se desaloja antes de terminar, los datos se corrompen.'] },
-          { titulo: 'Solución 1: Pinning', items: ['Bloquear los marcos involucrados en la E/S para que no sean reemplazados.', 'Simple pero reduce la disponibilidad de memoria.'] },
-          { titulo: 'Solución 2: Búferes del kernel', items: ['La E/S se realiza en búferes del kernel (nunca paginados).', 'Al completar, se copia al espacio de usuario. Evita la corrupción pero introduce una copia extra.'] },
-        ],
+        componente: 'bloqueo-paginas',
       },
       {
         id: '3.6.5',
