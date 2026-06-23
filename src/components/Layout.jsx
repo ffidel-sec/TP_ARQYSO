@@ -11,7 +11,7 @@ export default function Layout() {
       <footer className="bg-gradient-to-r from-indigo-900 via-indigo-800 to-indigo-900 dark:from-indigo-950 dark:via-indigo-900 dark:to-indigo-950 text-indigo-200/80 text-center text-sm py-5">
         <div className="max-w-6xl mx-auto px-4">
           <p className="font-medium">TP Arquitectura y Sistemas Operativos — 2026</p>
-          <p className="text-xs mt-1 opacity-60">Paginación y Segmentación de la Memoria RAM</p>
+          <p className="text-xs mt-1 opacity-60">Memoria Virtual · Sistema de Archivos</p>
         </div>
       </footer>
     </div>

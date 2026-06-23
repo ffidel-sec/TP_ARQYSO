@@ -950,8 +950,40 @@ int main(int argc, char *argv[])
   },
   'directorios': {
     subtemas: [
-      { id: '4.2.1', slug: 'sistemas-de-directorios-de-un-solo-nivel', titulo: 'Sistemas de directorios de un solo nivel', presentador: '' },
-      { id: '4.2.2', slug: 'sistemas-de-directorios-jerarquicos', titulo: 'Sistemas de directorios jerárquicos', presentador: '' },
+      {
+        id: '4.2.1',
+        slug: 'sistemas-de-directorios-de-un-solo-nivel',
+        titulo: 'Sistemas de directorios de un solo nivel',
+        presentador: '',
+        introduccion:
+          'La forma más simple de un sistema de directorios, es tener un directorio que contenga todos los archivos, a lo que se le llama Directorio Raíz, este directorio es el primer directorio, el más alto en la jerarquía de un sistema de archivos. No está contenido dentro de ninguna otra carpeta; al contrario, todas las demás carpetas y archivos del sistema nacen de él.',
+        secciones: [
+          {
+            static: true,
+            titulo: 'Ventajas',
+            items: [
+              'Su simpleza y la habilidad de localizar archivos con rapidez, esto pasa porque solo hay un lugar dónde buscar.',
+            ],
+          },
+        ],
+      },
+      {
+        id: '4.2.2',
+        slug: 'sistemas-de-directorios-jerarquicos',
+        titulo: 'Sistemas de directorios jerárquicos',
+        presentador: '',
+        introduccion:
+          'Tener un nivel de Directorios, es adecuado para aplicaciones dedicadas simples, pero para usuarios modernos con miles de archivos, sería imposible encontrar algo si todos los archivos estuvieran en un solo directorio. Para esto se crean los Sistemas de Directorios Jerárquicos, es decir, un árbol de directorios, con este esquema, pueden haber tantos directorios como se necesite para agrupar los archivos de en formas naturales.',
+        secciones: [
+          {
+            static: true,
+            titulo: 'Organización moderna',
+            items: [
+              'La capacidad de los usuarios para crear un número arbitrario de subdirectorios provee una poderosa herramienta de estructuración para que los usuarios organicen sus archivos y sus carpetas. Por eso los sistemas de archivos modernos se organizan de esta manera.',
+            ],
+          },
+        ],
+      },
       {
         id: '4.2.3',
         slug: 'nombres-de-rutas',

@@ -1,89 +1,39 @@
 import { Link } from 'react-router-dom'
-import { integrantes } from '../data/temas'
-
-const secciones = [
-  {
-    id: '3.6',
-    titulo: 'Cuestiones de Implementación',
-    slug: 'cuestiones-de-implementacion',
-    subtemas: [
-      { id: '3.6', titulo: 'Cuestiones de Implementación' },
-      { id: '3.6.1', titulo: 'Participación del SO en la paginación', slug: 'participacion-del-so-en-la-paginacion' },
-      { id: '3.6.2', titulo: 'Manejo de fallos de página', slug: 'manejo-de-fallas-de-pagina' },
-      { id: '3.6.3', titulo: 'Respaldo de Instrucción', slug: 'respaldo-de-instruccion' },
-      { id: '3.6.4', titulo: 'Bloqueo de páginas en memoria', slug: 'bloqueo-de-paginas-en-memoria' },
-      { id: '3.6.5', titulo: 'Almacén de respaldo', slug: 'almacen-de-respaldo' },
-      { id: '3.6.6', titulo: 'Separación de política y mecanismo', slug: 'separacion-de-politica-y-mecanismo' },
-    ],
-  },
-  {
-    id: '3.7',
-    titulo: 'Segmentación',
-    slug: 'segmentacion',
-    subtemas: [
-      { id: '3.7', titulo: 'Segmentación' },
-      { id: '3.7.1', titulo: 'Implementación de segmentación pura', slug: 'implementacion-de-segmentacion-pura' },
-      { id: '3.7.2', titulo: 'Segmentación con paginación: MULTICS', slug: 'segmentacion-con-paginacion-multics' },
-      { id: '3.7.3', titulo: 'Segmentación con paginación: Intel Pentium', slug: 'segmentacion-con-paginacion-intel-pentium' },
-    ],
-  },
-  {
-    id: '4.1',
-    titulo: 'Archivos',
-    slug: 'archivos',
-    subtemas: [
-      { id: '4.1.1', titulo: 'Nomenclatura de archivos', slug: 'nomenclatura-de-archivos' },
-      { id: '4.1.2', titulo: 'Estructura de archivos', slug: 'estructura-de-archivos' },
-      { id: '4.1.3', titulo: 'Tipos de archivos', slug: 'tipos-de-archivos' },
-      { id: '4.1.4', titulo: 'Acceso a archivos', slug: 'acceso-a-archivos' },
-      { id: '4.1.5', titulo: 'Atributos de archivos', slug: 'atributos-de-archivos' },
-      { id: '4.1.6', titulo: 'Operaciones de archivos', slug: 'operaciones-de-archivos' },
-      { id: '4.1.7', titulo: 'Programa de ejemplo', slug: 'programa-de-ejemplo' },
-    ],
-  },
-  {
-    id: '4.2',
-    titulo: 'Directorios',
-    slug: 'directorios',
-    subtemas: [
-      { id: '4.2.1', titulo: 'Sistemas de directorios de un solo nivel', slug: 'sistemas-de-directorios-de-un-solo-nivel' },
-      { id: '4.2.2', titulo: 'Sistemas de directorios jerárquicos', slug: 'sistemas-de-directorios-jerarquicos' },
-      { id: '4.2.3', titulo: 'Nombres de rutas', slug: 'nombres-de-rutas' },
-      { id: '4.2.4', titulo: 'Operaciones de directorios', slug: 'operaciones-de-directorios' },
-    ],
-  },
-]
+import { integrantes, unidades } from '../data/temas'
 
 export default function Home() {
   return (
     <div>
-      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 dark:from-indigo-950 dark:via-indigo-900 dark:to-purple-950">
+      <section className="relative overflow-hidden bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 dark:from-slate-900 dark:via-slate-950 dark:to-black">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-10 left-10 w-72 h-72 bg-white rounded-full blur-3xl" />
-          <div className="absolute bottom-10 right-10 w-96 h-96 bg-purple-300 rounded-full blur-3xl" />
+          <div className="absolute bottom-10 right-10 w-96 h-96 bg-blue-300 rounded-full blur-3xl" />
         </div>
         <div className="relative max-w-6xl mx-auto px-4 py-20 md:py-28 text-center">
-          <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight animate-fade-in-up">
-            Paginación y Segmentación
-            <span className="block text-indigo-200">de la Memoria RAM</span>
+          <p className="text-slate-400 text-sm font-semibold uppercase tracking-widest mb-4 animate-fade-in-up">
+            Trabajo Práctico
+          </p>
+          <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight animate-fade-in-up" style={{ animationDelay: '0.05s' }}>
+            Arquitectura y
+            <span className="block text-slate-300">Sistemas Operativos</span>
           </h1>
-          <p className="text-lg md:text-xl text-indigo-100/90 max-w-3xl mx-auto leading-relaxed animate-fade-in-up" style={{animationDelay: '0.15s'}}>
-            Exploramos cómo el sistema operativo divide y organiza la RAM para ejecutar múltiples procesos de forma eficiente, segura y sin conflictos.
+          <p className="text-lg text-slate-400 max-w-xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
+            Seleccioná la unidad que querés explorar.
           </p>
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 py-14">
+      <section className="max-w-6xl mx-auto px-4 py-12">
         <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-3">
-          <span className="w-1 h-6 bg-indigo-600 rounded-full inline-block" />
+          <span className="w-1 h-6 bg-slate-500 rounded-full inline-block" />
           Integrantes
         </h2>
         <div className="flex flex-wrap gap-3">
           {integrantes.map((nombre, i) => (
             <span
               key={nombre}
-              className="px-5 py-2.5 rounded-full text-sm font-medium bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md hover:border-indigo-300 dark:hover:border-indigo-600 transition-all duration-200 animate-fade-in-up cursor-pointer"
-              style={{animationDelay: `${i * 0.05}s`}}
+              className="px-5 py-2.5 rounded-full text-sm font-medium bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md hover:border-indigo-300 dark:hover:border-indigo-600 transition-all duration-200 animate-fade-in-up"
+              style={{ animationDelay: `${i * 0.05}s` }}
             >
               {nombre}
             </span>
@@ -91,50 +41,44 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 pb-16">
-        <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-3">
-          <span className="w-1 h-6 bg-indigo-600 rounded-full inline-block" />
-          Temas
+      <section className="max-w-6xl mx-auto px-4 pb-20">
+        <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-8 flex items-center gap-3">
+          <span className="w-1 h-6 bg-slate-500 rounded-full inline-block" />
+          Unidades
         </h2>
-        <div className="space-y-6">
-          {secciones.map((sec, si) => (
-            <div key={sec.id} className="animate-fade-in-up" style={{animationDelay: `${si * 0.1}s`}}>
-              <div className="flex items-center gap-3 mb-4 p-4 bg-white dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
-                <span className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center font-bold text-base shadow-sm">
-                  {sec.id}
-                </span>
-                <div className="flex-1">
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                    {sec.titulo}
+        <div className="grid md:grid-cols-2 gap-6">
+          {unidades.map((unidad, i) => {
+            const isIndigo = unidad.color === 'indigo'
+            return (
+              <Link
+                key={unidad.id}
+                to={`/unidad/${unidad.slug}`}
+                className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 shadow-sm hover:shadow-xl transition-all duration-300 animate-fade-in-up"
+                style={{ animationDelay: `${i * 0.1}s` }}
+              >
+                <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${isIndigo ? 'bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/40 dark:to-purple-950/40' : 'bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/40 dark:to-teal-950/40'}`} />
+                <div className="relative p-8">
+                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">
+                    {unidad.titulo}
                   </h3>
-                </div>
-                <svg className="w-5 h-5 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-
-              <div className="ml-4 pl-6 border-l-2 border-indigo-200 dark:border-indigo-700 space-y-1">
-                {sec.subtemas.map((st) => {
-                  const href = st.slug ? `/subtema/${st.slug}` : `/tema/${sec.slug}`
-                  return (
-                    <Link
-                      key={st.id}
-                      to={href}
-                      className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-white/50 dark:hover:bg-slate-800/50 transition-colors duration-200 group/sub"
+                  <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-6">
+                    {unidad.descripcion}
+                  </p>
+                  <div className="flex items-center gap-2 text-sm font-semibold">
+                    <span className={isIndigo ? 'text-indigo-600 dark:text-indigo-400' : 'text-emerald-600 dark:text-emerald-400'}>
+                      {unidad.secciones.length} secciones · {unidad.secciones.reduce((a, s) => a + s.subtemas.length, 0)} subtemas
+                    </span>
+                    <svg
+                      className={`w-4 h-4 group-hover:translate-x-1 transition-transform ${isIndigo ? 'text-indigo-500' : 'text-emerald-500'}`}
+                      fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     >
-                      <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 dark:bg-indigo-500 group-hover/sub:scale-150 transition-transform" />
-                      <span className="text-xs font-mono font-semibold text-indigo-500 dark:text-indigo-400 w-12 flex-shrink-0">
-                        {st.id}
-                      </span>
-                      <span className="text-sm text-slate-600 dark:text-slate-400 group-hover/sub:text-indigo-700 dark:group-hover/sub:text-indigo-300 transition-colors">
-                        {st.titulo}
-                      </span>
-                    </Link>
-                  )
-                })}
-              </div>
-            </div>
-          ))}
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              </Link>
+            )
+          })}
         </div>
       </section>
     </div>

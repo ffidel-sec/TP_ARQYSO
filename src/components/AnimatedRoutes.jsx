@@ -2,6 +2,7 @@ import { useLocation, Routes, Route } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import Layout from './Layout'
 import Home from '../pages/Home'
+import UnidadPage from '../pages/UnidadPage'
 import TemaPage from '../pages/TemaPage'
 import SubTemaPage from '../pages/SubTemaPage'
 
@@ -20,6 +21,7 @@ export default function AnimatedRoutes() {
         <Routes location={location}>
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
+            <Route path="/unidad/:slug" element={<UnidadPage />} />
             <Route path="/tema/:slug" element={<TemaPage />} />
             <Route path="/subtema/:subSlug" element={<SubTemaPage />} />
           </Route>

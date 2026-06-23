@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { temas } from '../data/temas'
+import { temas, temaToUnidad } from '../data/temas'
 import { contenido } from '../data/contenido'
 import FiguraSegmentos from '../components/FiguraSegmentos'
 
@@ -138,6 +138,7 @@ export default function TemaPage() {
   const tema = temas.find((t) => t.slug === slug)
   const index = temas.findIndex((t) => t.slug === slug)
   const data = contenido[slug]
+  const unidadSlug = temaToUnidad[slug] ?? ''
   const [openSections, setOpenSections] = useState({})
 
   useEffect(() => {
@@ -155,7 +156,7 @@ export default function TemaPage() {
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Tema no encontrado</h1>
-          <Link to="/" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">Volver al inicio</Link>
+          <Link to={`/unidad/${unidadSlug}`} className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">Volver a la unidad</Link>
         </div>
       </div>
     )
@@ -173,13 +174,13 @@ export default function TemaPage() {
         </div>
         <div className="relative max-w-6xl mx-auto px-4 py-12 md:py-16">
           <Link
-            to="/"
+            to={`/unidad/${unidadSlug}`}
             className="inline-flex items-center gap-1.5 text-indigo-200 hover:text-white text-sm font-medium mb-6 transition-colors duration-200 group"
           >
             <svg className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            Volver al inicio
+            Volver a la unidad
           </Link>
           <div className="flex items-start justify-between gap-4">
             <div>
@@ -287,13 +288,13 @@ export default function TemaPage() {
 
         <div className="flex items-center justify-between pb-10">
           <Link
-            to="/"
+            to={`/unidad/${unidadSlug}`}
             className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
             </svg>
-            Volver al inicio
+            Volver a la unidad
           </Link>
         </div>
       </div>
