@@ -19,4 +19,16 @@ export const temas = [
     titulo: 'Segmentación',
     presentador: 'Luciano Gaston Villosio, Grando Fidel, Julian Patricio Urgaregui',
   },
+  {
+    id: '4.1',
+    slug: 'archivos',
+    titulo: 'Archivos',
+    presentador: '',
+  },
+  {
+    id: '4.2',
+    slug: 'directorios',
+    titulo: 'Directorios',
+    presentador: '',
+  },
 ]

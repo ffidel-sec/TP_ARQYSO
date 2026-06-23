@@ -27,6 +27,31 @@ const secciones = [
       { id: '3.7.3', titulo: 'Segmentación con paginación: Intel Pentium', slug: 'segmentacion-con-paginacion-intel-pentium' },
     ],
   },
+  {
+    id: '4.1',
+    titulo: 'Archivos',
+    slug: 'archivos',
+    subtemas: [
+      { id: '4.1.1', titulo: 'Nomenclatura de archivos', slug: 'nomenclatura-de-archivos' },
+      { id: '4.1.2', titulo: 'Estructura de archivos', slug: 'estructura-de-archivos' },
+      { id: '4.1.3', titulo: 'Tipos de archivos', slug: 'tipos-de-archivos' },
+      { id: '4.1.4', titulo: 'Acceso a archivos', slug: 'acceso-a-archivos' },
+      { id: '4.1.5', titulo: 'Atributos de archivos', slug: 'atributos-de-archivos' },
+      { id: '4.1.6', titulo: 'Operaciones de archivos', slug: 'operaciones-de-archivos' },
+      { id: '4.1.7', titulo: 'Programa de ejemplo', slug: 'programa-de-ejemplo' },
+    ],
+  },
+  {
+    id: '4.2',
+    titulo: 'Directorios',
+    slug: 'directorios',
+    subtemas: [
+      { id: '4.2.1', titulo: 'Sistemas de directorios de un solo nivel', slug: 'sistemas-de-directorios-de-un-solo-nivel' },
+      { id: '4.2.2', titulo: 'Sistemas de directorios jerárquicos', slug: 'sistemas-de-directorios-jerarquicos' },
+      { id: '4.2.3', titulo: 'Nombres de rutas', slug: 'nombres-de-rutas' },
+      { id: '4.2.4', titulo: 'Operaciones de directorios', slug: 'operaciones-de-directorios' },
+    ],
+  },
 ]
 
 export default function Home() {

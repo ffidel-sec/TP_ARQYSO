@@ -491,6 +491,296 @@ export const contenido = {
       },
     ],
   },
+  'archivos': {
+    introduccion:
+      'Un proceso en ejecución solo puede guardar información limitada en su espacio de direcciones, y esa información desaparece cuando el proceso termina. Para el almacenamiento a largo plazo se necesita que: (1) sea posible almacenar cantidades muy grandes de información, (2) la información sobreviva a la terminación del proceso, y (3) múltiples procesos puedan acceder a la información concurrentemente. La solución del SO es la abstracción del archivo, administrada por el sistema de archivos.',
+    subtemas: [
+      {
+        id: '4.1.1',
+        slug: 'nomenclatura-de-archivos',
+        titulo: 'Nomenclatura de archivos',
+        presentador: '',
+        introduccion:
+          'Los archivos son mecanismos de abstracción: permiten almacenar y recuperar información ocultando al usuario los detalles de cómo y dónde se guarda en disco. La característica más importante de cualquier abstracción es cómo se nombran los objetos que administra. Cuando un proceso crea un archivo, le asigna un nombre. Cuando el proceso termina, el archivo sigue existiendo y otros procesos pueden acceder a él mediante ese nombre.',
+        secciones: [
+          {
+            static: true,
+            titulo: 'Reglas generales',
+            items: [
+              'La mayoría de los SO permiten cadenas de 1 a 255 caracteres.',
+              'Se permiten letras, dígitos y algunos caracteres especiales.',
+              'Sensibilidad a mayúsculas/minúsculas: UNIX distingue (maria ≠ Maria ≠ MARIA), MS-DOS/Windows no.',
+            ],
+          },
+          {
+            static: true,
+            titulo: 'Extensiones de archivo',
+            intro: 'Muchos SO aceptan nombres en dos partes separadas por un punto: nombre.extensión. La extensión indica la naturaleza del archivo.',
+            items: [
+              'archivo.c — Programa fuente en C',
+              'archivo.o — Archivo objeto (compilado, sin enlazar)',
+              'archivo.txt — Archivo de texto general',
+              'archivo.html — Página Web en HTML',
+              'archivo.jpg — Imagen codificada con estándar JPEG',
+              'archivo.mp3 — Música codificada en formato MPEG capa 3',
+              'archivo.pdf — Archivo en Formato de Documento Portable',
+              'archivo.zip — Archivo comprimido',
+              'archivo.bak — Archivo de respaldo',
+            ],
+          },
+          {
+            static: true,
+            titulo: 'UNIX vs Windows',
+            items: [
+              'En UNIX las extensiones son convenciones (no obligatorias).',
+              'En Windows el SO las reconoce y las asocia a programas específicos: hacer doble clic en archivo.pdf abre el lector de PDFs configurado.',
+            ],
+          },
+          {
+            static: true,
+            titulo: 'Ejemplo en terminal',
+            code: true,
+            items: [
+              'Crear archivos con distintas extensiones:',
+              '  touch programa.c',
+              '  touch notas.txt',
+              '  touch imagen.jpg',
+              'Listar archivos del directorio actual:',
+              '  ls -l',
+              'Ver solo archivos .c:',
+              '  ls *.c',
+              'En UNIX, los tres siguientes son archivos DISTINTOS:',
+              '  touch maria',
+              '  touch Maria',
+              '  touch MARIA',
+              '  ls -1   # muestra los tres por separado',
+            ],
+          },
+        ],
+        conceptos: [
+          { nombre: 'Extensión de archivo', descripcion: 'Parte del nombre del archivo después del punto que indica su tipo o formato. En UNIX es una convención; en Windows el SO la utiliza para asociar programas.' },
+          { nombre: 'Sensibilidad a mayúsculas', descripcion: 'Propiedad del sistema de archivos que determina si "Archivo.txt" y "archivo.txt" se consideran el mismo archivo o distintos. UNIX los distingue; Windows no.' },
+        ],
+      },
+      {
+        id: '4.1.2',
+        slug: 'estructura-de-archivos',
+        titulo: 'Estructura de archivos',
+        presentador: '',
+        introduccion:
+          'Los archivos pueden organizarse internamente de tres maneras, dependiendo del sistema operativo y el contexto histórico.',
+        secciones: [
+          {
+            static: true,
+            titulo: '(a) Secuencia de bytes',
+            intro: 'El SO no conoce ni le importa la estructura interna. Todo son bytes. El significado lo imponen los programas de usuario. UNIX y Windows usan este modelo. Máxima flexibilidad.',
+            items: [
+              'Ventaja: el programador tiene libertad total para organizar el contenido como quiera. El SO no interfiere.',
+              'Ejemplo: el archivo "Hola mundo\\n" se ve como [72][6F][6C][61][20][6D][75][6E][64][6F][0A]',
+            ],
+          },
+          {
+            static: true,
+            titulo: '(b) Secuencia de registros de longitud fija',
+            intro: 'Un archivo es una sucesión de registros con estructura interna definida. La operación read devuelve un registro; write sobrescribe o agrega uno.',
+            items: [
+              'Fue común en mainframes con tarjetas perforadas de 80 columnas: cada tarjeta era un registro de 80 caracteres.',
+              'Hoy en día obsoleto como sistema primario porque el modelo de bytes es más flexible.',
+              'Ejemplo conceptual: [Registro 1: "Gato       "][Registro 2: "Vaca       "][Registro 3: "Perro      "] — cada uno de 20 bytes fijos.',
+            ],
+          },
+          {
+            static: true,
+            titulo: '(c) Árbol de registros',
+            intro: 'Un archivo es un árbol de registros (no necesariamente de igual longitud), cada uno con un campo llave en posición fija. El árbol se ordena por esa llave para búsqueda rápida.',
+            items: [
+              'La operación fundamental no es "dame el byte 40" ni "dame el registro 3", sino "dame el registro cuya llave sea Pony".',
+              'Cuando insertás un registro nuevo, no elegís vos dónde va. El SO decide dónde colocarlo en el árbol para mantener el orden.',
+              'Se usa aún en mainframes para procesamiento de datos comerciales.',
+            ],
+          },
+          {
+            static: true,
+            titulo: 'Ejemplo en terminal',
+            code: true,
+            items: [
+              '(a) Secuencia de bytes — crear y leer un archivo de texto plano:',
+              '  echo "Hola mundo" > archivo.txt',
+              '  cat archivo.txt',
+              '(b) Crear un archivo con 3 registros escritos a mano:',
+              '  echo "Gato              " > registros.txt',
+              '  echo "Vaca              " >> registros.txt',
+              '  echo "Perro             " >> registros.txt',
+              '  cat registros.txt',
+              '  sed -n "2p" registros.txt   # lee solo el registro 2',
+              '(c) Archivo con campo llave (formato nombre:descripción):',
+              '  echo "Hormiga:insecto social" > zoologico.txt',
+              '  echo "Gato:felino domestico" >> zoologico.txt',
+              '  echo "Pony:equido pequeno" >> zoologico.txt',
+              '  echo "Rata:roedor urbano" >> zoologico.txt',
+              'Buscar por llave sin recorrer todo el archivo:',
+              '  grep "Pony" zoologico.txt  # Pony:equido pequeno',
+              'El sistema reordena solo (sort):',
+              '  echo "Cabra:rumiante" >> zoologico.txt',
+              '  sort zoologico.txt  # Cabra, Gato, Hormiga, Pony, Rata',
+            ],
+          },
+        ],
+        conceptos: [
+          { nombre: 'Secuencia de bytes', descripcion: 'Modelo de archivo donde el SO trata el contenido como una secuencia plana de bytes sin estructura. Usado por UNIX y Windows. Máxima flexibilidad para el programador.' },
+          { nombre: 'Registro de longitud fija', descripcion: 'Modelo de archivo compuesto por registros del mismo tamaño. Históricamente usado en mainframes con tarjetas perforadas. Obsoleto como sistema primario.' },
+          { nombre: 'Árbol de registros con llave', descripcion: 'Modelo de archivo donde cada registro tiene un campo llave y el SO mantiene un árbol ordenado por esa llave para búsqueda rápida. Usado en mainframes comerciales.' },
+        ],
+      },
+      { id: '4.1.3', slug: 'tipos-de-archivos', titulo: 'Tipos de archivos', presentador: '' },
+      { id: '4.1.4', slug: 'acceso-a-archivos', titulo: 'Acceso a archivos', presentador: '' },
+      {
+        id: '4.1.5',
+        slug: 'atributos-de-archivos',
+        titulo: 'Atributos de archivos',
+        presentador: '',
+        introduccion:
+          'Además del nombre y los datos propiamente dichos, los sistemas operativos asocian información adicional a cada archivo. A este conjunto de características se le conoce como atributos o metadatos, y varían según el diseño del sistema operativo.',
+        secciones: [
+          {
+            static: true,
+            titulo: 'Categorías de atributos',
+            intro: 'Los atributos más comunes se agrupan en las siguientes categorías:',
+            items: [
+              'Protección y seguridad: Determinan quién puede acceder al archivo y qué acciones puede realizar (lectura, escritura, ejecución). Incluye campos como Creador, Propietario y Contraseña.',
+              'Banderas (Flags): Son bits que activan o desactivan propiedades específicas: solo lectura, oculto, sistema, bandera de archivo (respaldo) y bandera temporal (borrado automático al finalizar el proceso).',
+              'Información de registro (para mainframes): Campos como Longitud de registro, Posición de la llave y Longitud de la llave, presentes en sistemas antiguos donde se busca información a través de claves preestablecidas.',
+              'Tiempos (Timestamps): Registran la fecha y hora de la creación, del último acceso y de la última modificación. Ejemplo de uso práctico: la herramienta make compara el tiempo de modificación del código fuente con el del código objeto para saber si debe recompilar.',
+              'Tamaño: Registra el tamaño actual en bytes. En sistemas operativos antiguos se requería además especificar un "tamaño máximo" para reservar espacio contiguo en disco, restricción superada en los sistemas modernos.',
+            ],
+          },
+          {
+            static: true,
+            titulo: 'Tabla de atributos',
+            table: true,
+            rows: [
+              { attr: 'Protección', meaning: 'Quién puede acceder al archivo y en qué forma' },
+              { attr: 'Contraseña', meaning: 'Contraseña necesaria para acceder al archivo' },
+              { attr: 'Creador', meaning: 'ID de la persona que creó el archivo' },
+              { attr: 'Propietario', meaning: 'El propietario actual' },
+              { attr: 'Bandera de sólo lectura', meaning: '0 para lectura/escritura; 1 para sólo lectura' },
+              { attr: 'Bandera oculto', meaning: '0 para normal; 1 para que no aparezca en los listados' },
+              { attr: 'Bandera del sistema', meaning: '0 para archivos normales; 1 para archivo del sistema' },
+              { attr: 'Bandera de archivo', meaning: '0 si ha sido respaldado; 1 si necesita respaldarse' },
+              { attr: 'Bandera ASCII/binario', meaning: '0 para archivo ASCII; 1 para archivo binario' },
+              { attr: 'Bandera de acceso aleatorio', meaning: '0 para sólo acceso secuencial; 1 para acceso aleatorio' },
+              { attr: 'Bandera temporal', meaning: '0 para normal; 1 para eliminar archivo al salir del proceso' },
+              { attr: 'Banderas de bloqueo', meaning: '0 para desbloqueado; distinto de cero para bloqueado' },
+              { attr: 'Longitud de registro', meaning: 'Número de bytes en un registro' },
+              { attr: 'Posición de la llave', meaning: 'Desplazamiento de la llave dentro de cada registro' },
+              { attr: 'Longitud de la llave', meaning: 'Número de bytes en el campo llave' },
+              { attr: 'Hora de creación', meaning: 'Fecha y hora en que se creó el archivo' },
+              { attr: 'Hora del último acceso', meaning: 'Fecha y hora en que se accedió al archivo por última vez' },
+              { attr: 'Hora de la última modificación', meaning: 'Fecha y hora en que se modificó por última vez el archivo' },
+              { attr: 'Tamaño actual', meaning: 'Número de bytes en el archivo' },
+              { attr: 'Tamaño máximo', meaning: 'Número de bytes hasta donde puede crecer el archivo' },
+            ],
+          },
+        ],
+      },
+      {
+        id: '4.1.6',
+        slug: 'operaciones-de-archivos',
+        titulo: 'Operaciones de archivos',
+        presentador: '',
+        introduccion:
+          'Los archivos existen para almacenar información y permitir que se recupere posteriormente. Distintos sistemas proveen diferentes operaciones para permitir el almacenamiento y la recuperación. A continuación se muestra un análisis de las llamadas al sistema más comunes relacionadas con los archivos.',
+        secciones: [
+          {
+            static: true,
+            titulo: 'Operaciones',
+            items: [
+              'Create (Crear): Anuncia la existencia de un nuevo archivo vacío y establece sus atributos iniciales.',
+              'Delete (Eliminar): Borra el archivo del sistema para liberar el espacio que ocupaba en el disco.',
+              'Open (Abrir): Antes de usar un archivo, el proceso debe abrirlo. El sistema operativo carga sus atributos y la lista de direcciones de disco en la memoria principal (RAM) para agilizar los accesos futuros.',
+              'Close (Cerrar): Rompe el vínculo del proceso con el archivo, liberando el espacio en la tabla interna de archivos abiertos del sistema. Además, obliga la escritura en disco del último bloque de datos, aunque no esté lleno.',
+              'Read (Leer): Recupera datos del archivo desde la posición actual del apuntador. Se debe especificar la cantidad de bytes requerida y proveer un búfer en memoria para almacenarlos.',
+              'Write (Escribir): Almacena datos en el archivo. Si el apuntador está al final, el archivo crece; si está en el medio, se sobrescriben los datos preexistentes.',
+              'Append (Añadir): Una variante restrictiva de Write que únicamente permite añadir datos exclusivamente al final del archivo.',
+              'Seek (Buscar/Reposicionar): Para archivos de acceso aleatorio. Mueve el apuntador interno del archivo a una posición exacta para que la siguiente operación de lectura o escritura ocurra allí.',
+              'Get attributes (Obtener atributos): Permite a procesos externos leer los metadatos del archivo (como hace make con las fechas de modificación).',
+              'Set attributes (Establecer atributos): Permite modificar los metadatos modificables (por ejemplo, cambiar los permisos de usuario o el estado de una bandera).',
+              'Rename (Renombrar): Cambia el nombre del archivo. Aunque se puede simular copiándolo con un nombre nuevo y borrando el viejo, la llamada nativa es mucho más eficiente.',
+            ],
+          },
+        ],
+      },
+      {
+        id: '4.1.7',
+        slug: 'programa-de-ejemplo',
+        titulo: 'Programa de ejemplo',
+        presentador: '',
+        introduccion:
+          'En esta sección examinaremos un programa simple de UNIX que copia un archivo de su archivo fuente a un archivo destino. Vamos a ver de manera secuencial la lógica básica de manipulación de archivos: copiar el archivo abc a xyz. Si xyz ya existe, se sobrescribirá. En caso contrario, se creará.',
+        secciones: [
+          {
+            static: true,
+            titulo: 'Código del programa',
+            source: `/* Programa para copiar archivos. La verificaci\u00F3n y el reporte de errores son m\u00EDnimos. */
+
+#include <sys/types.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+#define TAM_BUF 4096
+#define MODO_SALIDA 0700
+
+int main(int argc, char *argv[])
+{
+    int ent_da, sal_da, leer_cuenta, escribir_cuenta;
+    char buffer[TAM_BUF];
+
+    if (argc != 3) exit(1);
+
+    ent_da = open(argv[1], O_RDONLY);
+    if (ent_da < 0) exit(2);
+    sal_da = creat(argv[2], MODO_SALIDA);
+    if (sal_da < 0) exit(3);
+
+    while (TRUE) {
+        leer_cuenta = read(ent_da, buffer, TAM_BUF);
+        if (leer_cuenta < 0) break;
+        escribir_cuenta = write(sal_da, buffer, leer_cuenta);
+        if (escribir_cuenta <= 0) exit(4);
+    }
+
+    close(ent_da);
+    close(sal_da);
+    if (leer_cuenta == 0)
+        exit(0);
+    else
+        exit(5);
+}`,
+          },
+          {
+            static: true,
+            titulo: 'Estructura y funcionamiento',
+            items: [
+              'Estructura y Argumentos: El programa recibe argumentos a través de la función main(argc, argv). Verifica que el usuario haya ingresado exactamente dos nombres de archivo en la terminal (argc == 3). Si la sintaxis es incorrecta, aborta con un código de error.',
+              'Descriptores de Archivos: Declara variables numéricas (ent_da y sal_da) para almacenar los descriptores de archivo, que son números enteros cortos que el sistema operativo devuelve para identificar inequívocamente qué archivo se está operando.',
+              'Apertura y Creación: Invoca de forma consecutiva las llamadas open (para abrir el archivo origen en modo de sólo lectura O_RDONLY) y creat (para crear el archivo destino especificando los bits de protección de salida). Si alguna de estas llamadas devuelve un valor negativo, el programa falla de inmediato.',
+              'El ciclo de copia (Buffer de datos): Define un búfer en memoria de 4096 bytes (TAM_BUF). El programa entra en un ciclo infinito donde: (1) llama a read para traer un bloque de 4KB desde el origen hacia el búfer; (2) almacena la cantidad de bytes reales leídos en una variable (leer_cuenta); (3) si leer_cuenta es 0 (llegó al fin del archivo) o menor (error), sale del ciclo mediante un break; (4) llama a write para volcar en el archivo destino únicamente la cantidad de bytes que fueron leídos (leer_cuenta), evitando así basura informática en el bloque final.',
+              'Cierre y Finalización: Una vez fuera del bucle, el programa ejecuta la llamada close para ambos archivos y finaliza retornando un código de salida (0 si la copia fue exitosa, u otro número entero si hubo fallos de lectura).',
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  'directorios': {
+    subtemas: [
+      { id: '4.2.1', slug: 'sistemas-de-directorios-de-un-solo-nivel', titulo: 'Sistemas de directorios de un solo nivel', presentador: '' },
+      { id: '4.2.2', slug: 'sistemas-de-directorios-jerarquicos', titulo: 'Sistemas de directorios jerárquicos', presentador: '' },
+      { id: '4.2.3', slug: 'nombres-de-rutas', titulo: 'Nombres de rutas', presentador: '' },
+      { id: '4.2.4', slug: 'operaciones-de-directorios', titulo: 'Operaciones de directorios', presentador: '' },
+    ],
+  },
 }
 
 const subtemasPorSlug = {}

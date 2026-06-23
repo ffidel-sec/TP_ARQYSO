@@ -55,7 +55,55 @@ function SectionAccordion({ sec, index, isOpen, onToggle, color }) {
               {sec.intro}
             </p>
           )}
-          {sec.items && (
+          {sec.source ? (
+            <pre className="bg-slate-900 dark:bg-slate-950 text-green-400 text-sm rounded-xl p-4 overflow-x-auto leading-relaxed font-mono whitespace-pre-wrap">{sec.source}</pre>
+          ) : sec.table ? (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm border-collapse">
+                <thead>
+                  <tr className="bg-slate-100 dark:bg-slate-700/50 border-b border-slate-200 dark:border-slate-700">
+                    <th className="p-3 text-left font-semibold text-slate-700 dark:text-slate-200">Atributo</th>
+                    <th className="p-3 text-left font-semibold text-slate-700 dark:text-slate-200">Significado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sec.rows.map((row, j) => (
+                    <tr key={j} className="border-b border-slate-100 dark:border-slate-700/50 even:bg-slate-50/50 dark:even:bg-slate-800/30 hover:bg-slate-100 dark:hover:bg-slate-700/30 transition-colors">
+                      <td className="p-3 font-medium text-slate-800 dark:text-slate-200 whitespace-nowrap">{row.attr}</td>
+                      <td className="p-3 text-slate-600 dark:text-slate-300">{row.meaning}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : sec.code ? (
+            (() => {
+              const groups = sec.items.reduce((acc, item) => {
+                if (item.startsWith('  ')) {
+                  const last = acc[acc.length - 1]
+                  if (last) last.cmds.push(item.trimStart())
+                  else acc.push({ desc: null, cmds: [item.trimStart()] })
+                } else {
+                  acc.push({ desc: item, cmds: [] })
+                }
+                return acc
+              }, [])
+              return groups.map((g, gi) => (
+                <div key={gi} className="mb-4 last:mb-0">
+                  {g.desc && (
+                    <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-[15px]">{g.desc}</p>
+                  )}
+                  {g.cmds.length > 0 && (
+                    <pre className="bg-slate-900 dark:bg-slate-950 text-green-400 text-sm rounded-xl p-4 overflow-x-auto leading-relaxed font-mono whitespace-pre-wrap">
+                      {g.cmds.map((line, li) => (
+                        <div key={li}>{line}</div>
+                      ))}
+                    </pre>
+                  )}
+                </div>
+              ))
+            })()
+          ) : sec.items && (
             <ul className="space-y-2.5">
               {sec.items.map((item, j) => (
                 <li key={j} className="text-slate-600 dark:text-slate-300 leading-relaxed flex items-start gap-2">
@@ -221,7 +269,55 @@ export default function SubTemaPage() {
                         <JerarquiaMultics />
                       </div>
                     )}
-                    {sec.numbered ? (
+                    {sec.source ? (
+                      <pre className="bg-slate-900 dark:bg-slate-950 text-green-400 text-sm rounded-xl p-4 overflow-x-auto leading-relaxed font-mono whitespace-pre-wrap">{sec.source}</pre>
+                    ) : sec.table ? (
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-sm border-collapse">
+                          <thead>
+                            <tr className="bg-slate-100 dark:bg-slate-700/50 border-b border-slate-200 dark:border-slate-700">
+                              <th className="p-3 text-left font-semibold text-slate-700 dark:text-slate-200">Atributo</th>
+                              <th className="p-3 text-left font-semibold text-slate-700 dark:text-slate-200">Significado</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {sec.rows.map((row, j) => (
+                              <tr key={j} className="border-b border-slate-100 dark:border-slate-700/50 even:bg-slate-50/50 dark:even:bg-slate-800/30 hover:bg-slate-100 dark:hover:bg-slate-700/30 transition-colors">
+                                <td className="p-3 font-medium text-slate-800 dark:text-slate-200 whitespace-nowrap">{row.attr}</td>
+                                <td className="p-3 text-slate-600 dark:text-slate-300">{row.meaning}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    ) : sec.code ? (
+                      (() => {
+                        const groups = sec.items.reduce((acc, item) => {
+                          if (item.startsWith('  ')) {
+                            const last = acc[acc.length - 1]
+                            if (last) last.cmds.push(item.trimStart())
+                            else acc.push({ desc: null, cmds: [item.trimStart()] })
+                          } else {
+                            acc.push({ desc: item, cmds: [] })
+                          }
+                          return acc
+                        }, [])
+                        return groups.map((g, gi) => (
+                          <div key={gi} className="mb-4 last:mb-0">
+                            {g.desc && (
+                              <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-[15px] mb-2">{g.desc}</p>
+                            )}
+                            {g.cmds.length > 0 && (
+                              <pre className="bg-slate-900 dark:bg-slate-950 text-green-400 text-sm rounded-xl p-4 overflow-x-auto leading-relaxed font-mono whitespace-pre-wrap">
+                                {g.cmds.map((line, li) => (
+                                  <div key={li}>{line}</div>
+                                ))}
+                              </pre>
+                            )}
+                          </div>
+                        ))
+                      })()
+                    ) : sec.numbered ? (
                       <div className="space-y-3">
                         {sec.items?.map((item, j) => (
                           <p key={j} className="text-slate-600 dark:text-slate-300 leading-relaxed flex items-start gap-2">
