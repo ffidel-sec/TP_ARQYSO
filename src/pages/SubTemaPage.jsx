@@ -24,8 +24,9 @@ const topicColors = [
   'from-red-500 to-rose-600',
 ]
 
-function SectionAccordion({ sec, index, isOpen, onToggle, color }) {
+function SectionAccordion({ sec, index, isOpen, onToggle, color, dotColor }) {
   const contentRef = useRef(null)
+  const openChevron = dotColor?.includes('emerald') ? 'text-emerald-500' : 'text-indigo-500'
 
   return (
     <div className={`bg-white dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300 shadow-sm hover:shadow-md ${isOpen ? 'shadow-md' : ''}`}>
@@ -40,7 +41,7 @@ function SectionAccordion({ sec, index, isOpen, onToggle, color }) {
           {sec.titulo}
         </span>
         <svg
-          className={`w-5 h-5 text-slate-400 dark:text-slate-500 transition-all duration-300 ${isOpen ? 'rotate-180 text-indigo-500' : ''}`}
+          className={`w-5 h-5 text-slate-400 dark:text-slate-500 transition-all duration-300 ${isOpen ? `rotate-180 ${openChevron}` : ''}`}
           fill="none" stroke="currentColor" viewBox="0 0 24 24"
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -110,7 +111,7 @@ function SectionAccordion({ sec, index, isOpen, onToggle, color }) {
             <ul className="space-y-2.5">
               {sec.items.map((item, j) => (
                 <li key={j} className="text-slate-600 dark:text-slate-300 leading-relaxed flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 dark:bg-indigo-500 mt-2.5 flex-shrink-0" />
+                  <span className={`w-1.5 h-1.5 rounded-full ${dotColor ?? 'bg-indigo-400 dark:bg-indigo-500'} mt-2.5 flex-shrink-0`} />
                   <span>{item}</span>
                 </li>
               ))}
@@ -125,7 +126,13 @@ function SectionAccordion({ sec, index, isOpen, onToggle, color }) {
   )
 }
 
-function TimelineSection({ sec, index, color }) {
+function TimelineSection({ sec, index, color, dotColor }) {
+  const isEmerald = dotColor?.includes('emerald')
+  const connectorClass = isEmerald
+    ? 'from-emerald-300/60 to-emerald-200/40 dark:from-emerald-600/60 dark:to-emerald-500/30'
+    : 'from-indigo-300/60 to-indigo-200/40 dark:from-indigo-600/60 dark:to-indigo-500/30'
+  const bulletColor = dotColor ?? 'bg-indigo-400 dark:bg-indigo-500'
+
   return (
     <div className="relative flex gap-6 animate-fade-in-up" style={{animationDelay: `${index * 0.08}s`}}>
       <div className="flex flex-col items-center">
@@ -133,7 +140,7 @@ function TimelineSection({ sec, index, color }) {
           {index + 1}
         </span>
         {index < 9 && (
-          <div className="w-0.5 flex-1 min-h-[2rem] bg-gradient-to-b from-indigo-300/60 to-indigo-200/40 dark:from-indigo-600/60 dark:to-indigo-500/30" />
+          <div className={`w-0.5 flex-1 min-h-[2rem] bg-gradient-to-b ${connectorClass}`} />
         )}
       </div>
       <div className="flex-1 bg-white dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 p-5 mb-2 shadow-sm hover:shadow-md transition-all duration-200">
@@ -144,7 +151,7 @@ function TimelineSection({ sec, index, color }) {
           <ul className="space-y-1.5">
             {sec.items.map((item, j) => (
               <li key={j} className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed flex items-start gap-2">
-                <span className="w-1 h-1 rounded-full bg-indigo-400 dark:bg-indigo-500 mt-2 flex-shrink-0" />
+                <span className={`w-1 h-1 rounded-full ${bulletColor} mt-2 flex-shrink-0`} />
                 <span>{item}</span>
               </li>
             ))}
@@ -179,18 +186,38 @@ export default function SubTemaPage() {
   }
 
   const color = topicColors[temas.findIndex((t) => t.slug === st.parentSlug) % topicColors.length]
+  const isUnit4 = unidadSlug === 'sistema-de-archivos'
+  const heroGrad = isUnit4
+    ? 'from-emerald-600 via-emerald-700 to-teal-800 dark:from-emerald-950 dark:via-emerald-900 dark:to-teal-950'
+    : 'from-indigo-600 via-indigo-700 to-purple-800 dark:from-indigo-950 dark:via-indigo-900 dark:to-purple-950'
+  const heroBlobColor = isUnit4 ? 'bg-teal-300' : 'bg-purple-300'
+  const heroTextColor = isUnit4 ? 'text-emerald-200' : 'text-indigo-200'
+  const iconColor = isUnit4 ? 'text-emerald-500' : 'text-indigo-500'
+  const dotColor = isUnit4 ? 'bg-emerald-400 dark:bg-emerald-500' : 'bg-indigo-400 dark:bg-indigo-500'
+  const markerColor = isUnit4 ? 'marker:text-emerald-500 dark:marker:text-emerald-400' : 'marker:text-indigo-500 dark:marker:text-indigo-400'
+  const conceptosBg = isUnit4
+    ? 'from-emerald-50 to-teal-50 dark:from-emerald-950/50 dark:to-teal-950/50'
+    : 'from-indigo-50 to-purple-50 dark:from-indigo-950/50 dark:to-purple-950/50'
+  const conceptosBorder = isUnit4
+    ? 'border-emerald-100 dark:border-emerald-800/50'
+    : 'border-indigo-100 dark:border-indigo-800/50'
+  const conceptosBlobColor = isUnit4 ? 'bg-emerald-200/20' : 'bg-indigo-200/20'
+  const conceptosTitle = isUnit4 ? 'text-emerald-800 dark:text-emerald-300' : 'text-indigo-800 dark:text-indigo-300'
+  const bottomLinkHover = isUnit4
+    ? 'hover:text-emerald-600 dark:hover:text-emerald-400'
+    : 'hover:text-indigo-600 dark:hover:text-indigo-400'
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
-      <div className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 dark:from-indigo-950 dark:via-indigo-900 dark:to-purple-950">
+      <div className={`relative overflow-hidden bg-gradient-to-br ${heroGrad}`}>
         <div className="absolute inset-0 opacity-10">
           <div className="absolute -top-20 -left-20 w-80 h-80 bg-white rounded-full blur-3xl" />
-          <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-purple-300 rounded-full blur-3xl" />
+          <div className={`absolute -bottom-20 -right-20 w-96 h-96 ${heroBlobColor} rounded-full blur-3xl`} />
         </div>
         <div className="relative max-w-6xl mx-auto px-4 py-12 md:py-16">
           <Link
             to={`/unidad/${unidadSlug}`}
-            className="inline-flex items-center gap-1.5 text-indigo-200 hover:text-white text-sm font-medium mb-6 transition-colors duration-200 group"
+            className={`inline-flex items-center gap-1.5 ${heroTextColor} hover:text-white text-sm font-medium mb-6 transition-colors duration-200 group`}
           >
             <svg className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -199,7 +226,7 @@ export default function SubTemaPage() {
           </Link>
           <div className="flex items-start justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-indigo-200 text-xs font-medium mb-3">
+              <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 ${heroTextColor} text-xs font-medium mb-3`}>
                 <span>{st.id}</span>
               </div>
               <h1 className="text-3xl md:text-4xl font-extrabold text-white leading-tight">
@@ -214,7 +241,7 @@ export default function SubTemaPage() {
         {st.introduccion && !st.componente && (
           <section className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 md:p-8 mb-6 transition-colors animate-fade-in">
             <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-3 flex items-center gap-2">
-              <svg className="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className={`w-5 h-5 ${iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               Introducción
@@ -244,7 +271,7 @@ export default function SubTemaPage() {
         ) : st.tipo === 'timeline' ? (
           <section className="mb-6 pl-2">
             {st.secciones?.map((sec, i) => (
-              <TimelineSection key={i} sec={sec} index={i} color={color} />
+              <TimelineSection key={i} sec={sec} index={i} color={color} dotColor={dotColor} />
             ))}
           </section>
         ) : st.secciones ? (
@@ -332,12 +359,12 @@ export default function SubTemaPage() {
                       <div className="space-y-3">
                         {sec.items?.map((item, j) => (
                           <p key={j} className="text-slate-600 dark:text-slate-300 leading-relaxed flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 dark:bg-indigo-500 mt-2.5 flex-shrink-0" />
+                            <span className={`w-1.5 h-1.5 rounded-full ${dotColor} mt-2.5 flex-shrink-0`} />
                             <span>{item}</span>
                           </p>
                         ))}
                         {sec.algorithm && (
-                          <ol className="list-decimal list-inside space-y-2 ml-2 marker:text-indigo-500 dark:marker:text-indigo-400">
+                          <ol className={`list-decimal list-inside space-y-2 ml-2 ${markerColor}`}>
                             {sec.algorithm.map((step, j) => (
                               <li key={j} className="text-slate-600 dark:text-slate-300 leading-relaxed pl-1">
                                 {step}
@@ -355,7 +382,7 @@ export default function SubTemaPage() {
                       <ul className="space-y-2.5">
                         {sec.items.map((item, j) => (
                           <li key={j} className="text-slate-600 dark:text-slate-300 leading-relaxed flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 dark:bg-indigo-500 mt-2.5 flex-shrink-0" />
+                            <span className={`w-1.5 h-1.5 rounded-full ${dotColor} mt-2.5 flex-shrink-0`} />
                             <span>{item}</span>
                           </li>
                         ))}
@@ -369,6 +396,7 @@ export default function SubTemaPage() {
                     isOpen={!!openSections[i]}
                     onToggle={() => toggleSection(i)}
                     color={color}
+                    dotColor={dotColor}
                   />
                 )}
               </div>
@@ -396,9 +424,9 @@ export default function SubTemaPage() {
         )}
 
         {st.conceptos && !st.componente && (
-          <section className="relative overflow-hidden bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/50 dark:to-purple-950/50 rounded-2xl border border-indigo-100 dark:border-indigo-800/50 p-6 md:p-8 mb-6 transition-colors">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-200/20 rounded-full blur-2xl" />
-            <h2 className="text-lg font-semibold text-indigo-800 dark:text-indigo-300 mb-5 flex items-center gap-2">
+          <section className={`relative overflow-hidden bg-gradient-to-br ${conceptosBg} rounded-2xl border ${conceptosBorder} p-6 md:p-8 mb-6 transition-colors`}>
+            <div className={`absolute top-0 right-0 w-32 h-32 ${conceptosBlobColor} rounded-full blur-2xl`} />
+            <h2 className={`text-lg font-semibold ${conceptosTitle} mb-5 flex items-center gap-2`}>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
               </svg>
@@ -408,7 +436,7 @@ export default function SubTemaPage() {
               {st.conceptos.map((c, i) => (
                 <div
                   key={i}
-                  className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl border border-indigo-100 dark:border-indigo-800/50 p-5 hover:shadow-md transition-all duration-200 animate-fade-in-up"
+                  className={`bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl border ${conceptosBorder} p-5 hover:shadow-md transition-all duration-200 animate-fade-in-up`}
                   style={{animationDelay: `${i * 0.1}s`}}
                 >
                   <span className={`inline-block text-white text-xs font-bold px-2.5 py-1 rounded-lg mb-3 bg-gradient-to-r ${color}`}>
@@ -426,7 +454,7 @@ export default function SubTemaPage() {
         <div className="flex items-center justify-between pb-10">
           <Link
             to={`/unidad/${unidadSlug}`}
-            className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+            className={`inline-flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400 ${bottomLinkHover} transition-colors`}
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
