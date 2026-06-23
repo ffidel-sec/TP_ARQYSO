@@ -632,8 +632,183 @@ export const contenido = {
           { nombre: 'Árbol de registros con llave', descripcion: 'Modelo de archivo donde cada registro tiene un campo llave y el SO mantiene un árbol ordenado por esa llave para búsqueda rápida. Usado en mainframes comerciales.' },
         ],
       },
-      { id: '4.1.3', slug: 'tipos-de-archivos', titulo: 'Tipos de archivos', presentador: '' },
-      { id: '4.1.4', slug: 'acceso-a-archivos', titulo: 'Acceso a archivos', presentador: '' },
+      {
+        id: '4.1.3',
+        slug: 'tipos-de-archivos',
+        titulo: 'Tipos de archivos',
+        presentador: '',
+        introduccion:
+          'Muchos sistemas operativos, incluyendo UNIX y Windows, soportan varias categorías de archivos con funciones específicas.',
+        secciones: [
+          {
+            static: true,
+            titulo: 'Archivos regulares',
+            intro: 'Son los que contienen la información del usuario. Se subdividen generalmente en:',
+            items: [
+              'Archivos ASCII: Constan de líneas de texto. Su gran ventaja es que pueden mostrarse, imprimirse y editarse con herramientas estándar, además de facilitar la conexión entre programas mediante canalizaciones.',
+              'Archivos binarios: Son cualquier archivo que no es ASCII. Tienen una estructura interna que solo conocen los programas que los utilizan.',
+            ],
+          },
+          {
+            static: true,
+            titulo: 'Directorios',
+            items: [
+              'Son archivos de sistema utilizados para mantener la estructura y organización del sistema de archivos.',
+            ],
+          },
+          {
+            static: true,
+            titulo: 'Archivos especiales de caracteres',
+            items: [
+              'Se relacionan con la entrada/salida (E/S) y modelan dispositivos serie como terminales, impresoras y redes.',
+            ],
+          },
+          {
+            static: true,
+            titulo: 'Archivos especiales de bloques',
+            items: [
+              'Se utilizan específicamente para modelar dispositivos que almacenan datos en bloques, como los discos.',
+            ],
+          },
+          {
+            static: true,
+            titulo: 'Estructura de archivos binarios comunes',
+            intro: 'Incluso si el sistema operativo ve un archivo solo como una secuencia de bytes, ciertos archivos binarios deben seguir formatos específicos para ser útiles:',
+            items: [
+              'Archivos ejecutables: Contienen secciones como un número mágico (para identificar el tipo de archivo), un encabezado con tamaños de las secciones, el texto del programa, datos, bits de reubicación y una tabla de símbolos para depuración.',
+              'Archivos de archivo (Archives): Consisten en colecciones de módulos de biblioteca compilados. Cada módulo tiene un encabezado con metadatos como el nombre, la fecha y los permisos.',
+            ],
+          },
+          {
+            static: true,
+            titulo: 'Estructura de archivo ejecutable y módulos objeto',
+            html: `<div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden">
+<div style="overflow-x:auto;padding:1.5rem">
+<svg viewBox="0 0 740 640" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif" style="max-width:100%;height:auto;display:block;margin:0 auto">
+  <defs>
+    <pattern id="hatch" width="8" height="8" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <rect width="8" height="8" fill="#ededed"/>
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#1a1a1a" stroke-width="1.1"/>
+    </pattern>
+  </defs>
+  <style>
+    .box  { fill:#ededed; stroke:#1a1a1a; stroke-width:1.4; }
+    .lbl  { fill:#000; font-size:17px; }
+    .sm   { fill:#000; font-size:15px; }
+    .cap  { fill:#000; font-size:19px; font-style:italic; }
+    .brk  { fill:none; stroke:#1a1a1a; stroke-width:1.2; }
+    .lead { fill:none; stroke:#1a1a1a; stroke-width:1; }
+  </style>
+  <rect x="0" y="0" width="740" height="640" fill="#d9d9d9"/>
+  <g>
+    <rect class="box" x="95" y="65"  width="160" height="28"/>
+    <rect class="box" x="95" y="93"  width="160" height="28"/>
+    <rect class="box" x="95" y="121" width="160" height="28"/>
+    <rect class="box" x="95" y="149" width="160" height="28"/>
+    <rect class="box" x="95" y="177" width="160" height="36"/>
+    <rect class="box" x="95" y="213" width="160" height="28"/>
+    <rect class="box" x="95" y="241" width="160" height="30" fill="url(#hatch)"/>
+    <rect class="box" x="95" y="271" width="160" height="34"/>
+    <text class="sm" x="175" y="83"  text-anchor="middle">N\u00FAmero m\u00E1gico</text>
+    <text class="sm" x="175" y="111" text-anchor="middle">Tama\u00F1o del texto</text>
+    <text class="sm" x="175" y="139" text-anchor="middle">Tama\u00F1o de los datos</text>
+    <text class="sm" x="175" y="167" text-anchor="middle">Tama\u00F1o del BSS</text>
+    <text class="sm" x="175" y="194" text-anchor="middle">Tama\u00F1o de la tabla</text>
+    <text class="sm" x="175" y="210" text-anchor="middle">de s\u00EDmbolos</text>
+    <text class="sm" x="175" y="231" text-anchor="middle">Punto de entrada</text>
+    <text class="sm" x="175" y="292" text-anchor="middle">Banderas</text>
+    <rect class="box" x="95" y="305" width="160" height="68"/>
+    <rect class="box" x="95" y="373" width="160" height="68"/>
+    <rect class="box" x="95" y="441" width="160" height="60"/>
+    <rect class="box" x="95" y="501" width="160" height="76"/>
+    <text class="lbl" x="175" y="345" text-anchor="middle">Texto</text>
+    <text class="lbl" x="175" y="413" text-anchor="middle">Datos</text>
+    <text class="sm"  x="175" y="475" text-anchor="middle">Bits de reubicaci\u00F3n</text>
+    <text class="sm"  x="175" y="533" text-anchor="middle">Tabla de</text>
+    <text class="sm"  x="175" y="549" text-anchor="middle">s\u00EDmbolos</text>
+    <path class="brk" d="M 88 305 q 6 5 0 10 q -6 5 0 10"/>
+    <path class="brk" d="M 88 373 q 6 5 0 10 q -6 5 0 10"/>
+    <path class="brk" d="M 88 441 q 6 5 0 10 q -6 5 0 10"/>
+    <path class="brk" d="M 88 501 q 6 5 0 10 q -6 5 0 10"/>
+    <path class="brk" d="M 58 65 h -8 v 240 h 8" stroke-width="1.3"/>
+    <text class="sm" x="44" y="190" text-anchor="middle" transform="rotate(-90 44 190)">Encabezado</text>
+    <text class="cap" x="175" y="600" text-anchor="middle">(a)</text>
+  </g>
+  <g>
+    <rect class="box" x="330" y="65"  width="130" height="45"/>
+    <rect class="box" x="330" y="110" width="130" height="105"/>
+    <rect class="box" x="330" y="215" width="130" height="45"/>
+    <rect class="box" x="330" y="260" width="130" height="105"/>
+    <rect class="box" x="330" y="365" width="130" height="45"/>
+    <rect class="box" x="330" y="410" width="130" height="105"/>
+    <text class="sm" x="395" y="92"  text-anchor="middle">Encabezado</text>
+    <text class="sm" x="395" y="158" text-anchor="middle">M\u00F3dulo</text>
+    <text class="sm" x="395" y="172" text-anchor="middle">objeto</text>
+    <text class="sm" x="395" y="242" text-anchor="middle">Encabezado</text>
+    <text class="sm" x="395" y="308" text-anchor="middle">M\u00F3dulo</text>
+    <text class="sm" x="395" y="322" text-anchor="middle">objeto</text>
+    <text class="sm" x="395" y="392" text-anchor="middle">Encabezado</text>
+    <text class="sm" x="395" y="458" text-anchor="middle">M\u00F3dulo</text>
+    <text class="sm" x="395" y="472" text-anchor="middle">objeto</text>
+    <text class="cap" x="395" y="600" text-anchor="middle">(b)</text>
+  </g>
+  <g>
+    <line class="lead" x1="460" y1="65"  x2="530" y2="40"/>
+    <line class="lead" x1="460" y1="110" x2="530" y2="270"/>
+    <rect class="box" x="530" y="40"  width="130" height="70"/>
+    <rect class="box" x="530" y="110" width="130" height="45"/>
+    <rect class="box" x="530" y="155" width="130" height="30"/>
+    <rect class="box" x="530" y="185" width="130" height="30"/>
+    <rect class="box" x="530" y="215" width="130" height="55"/>
+    <text class="sm" x="595" y="70"  text-anchor="middle">Nombre del</text>
+    <text class="sm" x="595" y="84"  text-anchor="middle">m\u00F3dulo</text>
+    <text class="sm" x="595" y="137" text-anchor="middle">Datos</text>
+    <text class="sm" x="595" y="174" text-anchor="middle">Propietario</text>
+    <text class="sm" x="595" y="204" text-anchor="middle">Protecci\u00F3n</text>
+    <text class="sm" x="595" y="246" text-anchor="middle">Tama\u00F1o</text>
+  </g>
+</svg>
+</div>
+</div>`,
+          },
+        ],
+      },
+      {
+        id: '4.1.4',
+        slug: 'acceso-a-archivos',
+        titulo: 'Acceso a archivos',
+        presentador: '',
+        introduccion:
+          'Los sistemas operativos han evolucionado en su capacidad de acceder a los datos dependiendo del medio de almacenamiento utilizado.',
+        secciones: [
+          {
+            static: true,
+            titulo: 'Acceso secuencial',
+            items: [
+              'Era el único tipo disponible en los primeros sistemas operativos.',
+              'Un proceso puede leer todos los bytes o registros en orden desde el principio, pero no puede saltar datos o leer fuera de orden.',
+              'Era el método convencional cuando el medio de almacenamiento principal era la cinta magnética.',
+            ],
+          },
+          {
+            static: true,
+            titulo: 'Acceso aleatorio',
+            intro: 'Se hizo posible con la llegada de los discos magnéticos.',
+            items: [
+              'Permite leer bytes o registros en cualquier orden, accediendo a la información por llaves en lugar de solo por posición.',
+              'Importancia: Es esencial para aplicaciones de bases de datos, como los sistemas de reservación de aerolíneas, donde se necesita un registro específico de forma inmediata.',
+            ],
+          },
+          {
+            static: true,
+            titulo: 'Métodos para especificar la posición',
+            items: [
+              'Incluir la posición de inicio en cada operación read.',
+              'Utilizar una operación especial llamada seek para establecer la posición actual y luego realizar lecturas secuenciales desde ese punto (método empleado por UNIX y Windows).',
+            ],
+          },
+        ],
+      },
       {
         id: '4.1.5',
         slug: 'atributos-de-archivos',
@@ -777,7 +952,79 @@ int main(int argc, char *argv[])
     subtemas: [
       { id: '4.2.1', slug: 'sistemas-de-directorios-de-un-solo-nivel', titulo: 'Sistemas de directorios de un solo nivel', presentador: '' },
       { id: '4.2.2', slug: 'sistemas-de-directorios-jerarquicos', titulo: 'Sistemas de directorios jerárquicos', presentador: '' },
-      { id: '4.2.3', slug: 'nombres-de-rutas', titulo: 'Nombres de rutas', presentador: '' },
+      {
+        id: '4.2.3',
+        slug: 'nombres-de-rutas',
+        titulo: 'Nombres de rutas',
+        presentador: '',
+        introduccion: 'En los sistemas operativos modernos tenemos dos formas de especificar rutas dentro del sistema jerárquico de directorios: rutas absolutas y rutas relativas. Conocer la diferencia es fundamental para navegar el sistema de archivos y ejecutar comandos correctamente.',
+        secciones: [
+          {
+            static: true,
+            titulo: 'Rutas Absolutas',
+            code: true,
+            intro: 'Parten obligatoriamente desde el directorio raíz y son únicas: no importa desde dónde se ejecuten, siempre apuntan al mismo lugar.',
+            items: [
+              'En Linux, parten desde la raíz del sistema de archivos (/):',
+              '  /home/usuario/Escritorio/test.py',
+              'En Windows, parten desde el punto de montaje (C:\\, D:\\, E:\\...) y usan \\ como separador:',
+              '  C:\\Users\\usuario\\Escritorio',
+            ],
+          },
+          {
+            static: true,
+            titulo: 'Rutas Relativas',
+            code: true,
+            intro: 'Parten del directorio de trabajo actual (el directorio en el que se encuentra el usuario en ese momento). Por ejemplo, si estamos en:',
+            items: [
+              '  /home/usuario/Escritorio/',
+              'Y queremos mover el archivo "nota.txt" a /home/usuario/Documentos/, podemos usar la ruta relativa:',
+              '  mv nota.txt ../Documentos/',
+              'Los siguientes dos comandos hacen exactamente lo mismo:',
+              '  mv nota.txt ../Documentos',
+              '  mv /home/usuario/Escritorio/nota.txt /home/usuario/Documentos/',
+            ],
+          },
+          {
+            static: true,
+            titulo: 'Operadores de rutas relativas',
+            html: `<div style="overflow-x:auto">
+  <table style="width:100%;border-collapse:collapse;font-size:14px;font-family:'Courier New',monospace">
+    <thead>
+      <tr style="border-bottom:2px solid rgba(99,102,241,0.4)">
+        <th style="padding:10px 14px;text-align:left;font-weight:700;color:#818cf8;letter-spacing:.5px">Operador</th>
+        <th style="padding:10px 14px;text-align:left;font-weight:700;color:#818cf8;letter-spacing:.5px;font-family:inherit">Descripción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid rgba(100,116,139,0.2)">
+        <td style="padding:10px 14px;font-weight:700;color:#34d399">../</td>
+        <td style="padding:10px 14px;color:#e2e8f0">Retrocede un directorio (directorio padre)</td>
+      </tr>
+      <tr style="border-bottom:1px solid rgba(100,116,139,0.2)">
+        <td style="padding:10px 14px;font-weight:700;color:#34d399">../../</td>
+        <td style="padding:10px 14px;color:#e2e8f0">Retrocede dos directorios (directorio abuelo)</td>
+      </tr>
+      <tr style="border-bottom:1px solid rgba(100,116,139,0.2)">
+        <td style="padding:10px 14px;font-weight:700;color:#34d399">./</td>
+        <td style="padding:10px 14px;color:#e2e8f0">Directorio actual</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 14px;font-weight:700;color:#34d399">~/</td>
+        <td style="padding:10px 14px;color:#e2e8f0">Directorio <em>home</em> del usuario (<code style="background:rgba(99,102,241,0.15);padding:1px 5px;border-radius:4px;color:#e2e8f0">/home/usuario</code>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>`,
+          },
+          {
+            static: true,
+            titulo: 'Árbol del sistema de archivos',
+            intro: 'Visualización interactiva del sistema jerárquico de directorios. Pasa el ratón sobre cada nodo para ver su ruta absoluta.',
+            component: 'filesystem-tree',
+          },
+        ],
+      },
       { id: '4.2.4', slug: 'operaciones-de-directorios', titulo: 'Operaciones de directorios', presentador: '' },
     ],
   },

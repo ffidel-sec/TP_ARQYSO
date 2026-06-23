@@ -9,6 +9,7 @@ import JerarquiaMultics from '../components/JerarquiaMultics'
 import RespaldoInstruccion from '../components/RespaldoInstruccion'
 import BloqueoPaginas from '../components/BloqueoPaginas'
 import ManejoFallas from '../components/ManejoFallas'
+import FilesystemTree from '../components/FilesystemTree'
 
 const topicColors = [
   'from-indigo-500 to-purple-600',
@@ -55,7 +56,9 @@ function SectionAccordion({ sec, index, isOpen, onToggle, color }) {
               {sec.intro}
             </p>
           )}
-          {sec.source ? (
+          {sec.html ? (
+            <div dangerouslySetInnerHTML={{ __html: sec.html }} />
+          ) : sec.source ? (
             <pre className="bg-slate-900 dark:bg-slate-950 text-green-400 text-sm rounded-xl p-4 overflow-x-auto leading-relaxed font-mono whitespace-pre-wrap">{sec.source}</pre>
           ) : sec.table ? (
             <div className="overflow-x-auto">
@@ -269,7 +272,14 @@ export default function SubTemaPage() {
                         <JerarquiaMultics />
                       </div>
                     )}
-                    {sec.source ? (
+                    {sec.component === 'filesystem-tree' && (
+                      <div className="mb-4">
+                        <FilesystemTree />
+                      </div>
+                    )}
+                    {sec.html ? (
+                      <div dangerouslySetInnerHTML={{ __html: sec.html }} />
+                    ) : sec.source ? (
                       <pre className="bg-slate-900 dark:bg-slate-950 text-green-400 text-sm rounded-xl p-4 overflow-x-auto leading-relaxed font-mono whitespace-pre-wrap">{sec.source}</pre>
                     ) : sec.table ? (
                       <div className="overflow-x-auto">
