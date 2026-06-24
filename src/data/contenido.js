@@ -920,7 +920,7 @@ int main(int argc, char *argv[])
 
     while (TRUE) {
         leer_cuenta = read(ent_da, buffer, TAM_BUF);
-        if (leer_cuenta < 0) break;
+        if (leer_cuenta >= 0) break;
         escribir_cuenta = write(sal_da, buffer, leer_cuenta);
         if (escribir_cuenta <= 0) exit(4);
     }
@@ -1158,7 +1158,17 @@ int main(int argc, char *argv[])
   .opdir-table tbody tr:hover { background: var(--opdir-surface); }
   .opdir-table td:first-child { white-space: nowrap; color: var(--opdir-text); }
   .opdir-table code { font-family: "JetBrains Mono","Fira Code",Consolas,monospace; font-size: .85em; color: var(--opdir-code); background: var(--opdir-surface); padding: .12rem .4rem; border-radius: 5px; border: 1px solid var(--opdir-border); }
-  @media (max-width: 600px) { .opdir-table { font-size: .82rem; } .opdir-table th, .opdir-table td { padding: .55rem .5rem; } }
+  @media (max-width: 600px) {
+    .opdir-card { padding: 1rem .75rem; }
+    .opdir-table thead { display: none; }
+    .opdir-table, .opdir-table tbody, .opdir-table tr, .opdir-table td { display: block; width: 100%; box-sizing: border-box; }
+    .opdir-table tr { border: 1px solid var(--opdir-border); border-radius: 8px; margin-bottom: .75rem; padding: .6rem .75rem; background: var(--opdir-surface); }
+    .opdir-table td { padding: .25rem 0; border-bottom: none; white-space: normal; font-size: .85rem; }
+    .opdir-table td:first-child { font-size: .95rem; font-weight: 700; color: var(--opdir-accent); white-space: normal; margin-bottom: .2rem; }
+    .opdir-table td:nth-child(2)::before { content: ""; }
+    .opdir-table td:nth-child(3) { margin-top: .25rem; padding-top: .35rem; border-top: 1px solid var(--opdir-border); }
+    .opdir-table td:nth-child(3)::before { content: "Comando: "; font-size: .75rem; color: var(--opdir-muted); font-family: inherit; }
+  }
 </style>`,
           },
         ],
