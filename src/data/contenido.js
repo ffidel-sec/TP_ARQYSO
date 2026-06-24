@@ -960,6 +960,11 @@ int main(int argc, char *argv[])
         secciones: [
           {
             static: true,
+            component: 'directorio-unico-nivel',
+            titulo: 'Visualización del sistema de un solo nivel',
+          },
+          {
+            static: true,
             titulo: 'Ventajas',
             items: [
               'Su simpleza y la habilidad de localizar archivos con rapidez, esto pasa porque solo hay un lugar dónde buscar.',
@@ -975,6 +980,11 @@ int main(int argc, char *argv[])
         introduccion:
           'Tener un nivel de Directorios, es adecuado para aplicaciones dedicadas simples, pero para usuarios modernos con miles de archivos, sería imposible encontrar algo si todos los archivos estuvieran en un solo directorio. Para esto se crean los Sistemas de Directorios Jerárquicos, es decir, un árbol de directorios, con este esquema, pueden haber tantos directorios como se necesite para agrupar los archivos de en formas naturales.',
         secciones: [
+          {
+            static: true,
+            component: 'directorio-jerarquico',
+            titulo: 'Visualización del sistema jerárquico',
+          },
           {
             static: true,
             titulo: 'Organización moderna',
