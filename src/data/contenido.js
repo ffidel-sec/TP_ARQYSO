@@ -920,7 +920,7 @@ int main(int argc, char *argv[])
 
     while (TRUE) {
         leer_cuenta = read(ent_da, buffer, TAM_BUF);
-        if (leer_cuenta >= 0) break;
+        if (leer_cuenta =< 0) break;
         escribir_cuenta = write(sal_da, buffer, leer_cuenta);
         if (escribir_cuenta <= 0) exit(4);
     }
