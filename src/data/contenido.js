@@ -1009,7 +1009,7 @@ int main(int argc, char *argv[])
             items: [
               'En Linux, parten desde la raíz del sistema de archivos (/):',
               '  /home/usuario/Escritorio/test.py',
-              'En Windows, parten desde el punto de montaje (C:\\, D:\\, E:\\...) y usan \\ como separador:',
+              'En Windows, parten desde la unidad que nombra la particion (C;\\, D:\\, E:\\...) y usan "\\" como separador:',
               '  C:\\Users\\usuario\\Escritorio',
             ],
           },
