@@ -1086,7 +1086,7 @@ int main(int argc, char *argv[])
       </tr>
       <tr>
         <td><strong>Delete</strong></td>
-        <td>Elimina un directorio. Solo puede borrarse si está vacío.</td>
+        <td>Elimina un directorio. </td>
         <td><code>rmdir</code> / <code>rm -rf</code></td>
       </tr>
       <tr>
