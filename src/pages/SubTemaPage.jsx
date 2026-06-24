@@ -10,6 +10,8 @@ import RespaldoInstruccion from '../components/RespaldoInstruccion'
 import BloqueoPaginas from '../components/BloqueoPaginas'
 import ManejoFallas from '../components/ManejoFallas'
 import FilesystemTree from '../components/FilesystemTree'
+import DirectorioUnicoNivel from '../components/DirectorioUnicoNivel'
+import DirectorioJerarquico from '../components/DirectorioJerarquico'
 
 const topicColors = [
   'from-indigo-500 to-purple-600',
@@ -303,6 +305,16 @@ export default function SubTemaPage() {
                     {sec.component === 'filesystem-tree' && (
                       <div className="mb-4">
                         <FilesystemTree />
+                      </div>
+                    )}
+                    {sec.component === 'directorio-unico-nivel' && (
+                      <div className="mb-4">
+                        <DirectorioUnicoNivel />
+                      </div>
+                    )}
+                    {sec.component === 'directorio-jerarquico' && (
+                      <div className="mb-4">
+                        <DirectorioJerarquico />
                       </div>
                     )}
                     {sec.html ? (
